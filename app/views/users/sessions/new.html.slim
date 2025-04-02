@@ -1,0 +1,39 @@
+/
+  h2
+    | Log in
+  = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+    .field
+      = f.label :email
+    br
+    = f.email_field :email, autofocus: true, autocomplete: "email"
+    .field
+      = f.label :password
+    br
+    = f.password_field :password, autocomplete: "current-password"
+    - if devise_mapping.rememberable?
+      .field
+        = f.check_box :remember_me
+        = f.label :remember_me
+    .actions
+      = f.submit "Log in"
+  = render "users/shared/links"
+
+div.rounded-3.border.mx-auto.mt-5.mb-3 style="width: 600px"
+  div.d-flex.justify-content-center
+    = image_tag 'x_logo.avif', size: '50x50'
+  div.mx-auto style="width: 75%"
+    h3.fw-semibold.mt-4
+      | Xにログイン
+
+    = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+
+      div.mb-3.mt-4
+        = f.email_field :email, class: "form-control", placeholder: "メールアドレス"
+      div.mb-3
+        = f.password_field :password, class: "form-control", placeholder: "パスワード"
+      div.mb-3 style="margin-top: 220px"
+        = f.submit "ログイン", class: "btn btn-primary w-100"
+
+    div.mb-3
+        |アカウントをお持ちでない場合は
+        = link_to "登録", new_user_registration_path, class: "text-decoration-none"
