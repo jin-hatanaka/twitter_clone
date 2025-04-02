@@ -71,13 +71,13 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'https://protected-peak-36056-bd27eb82b192.herokuapp.com/' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :enable_starttls_auto => true,
-    :address => "smtp.gmail.com",
-    :port => 587,
-    :domain => 'gmail.com',
-    :user_name => Rails.application.credentials.dig(:gmail, :email),
-    :password => Rails.application.credentials.dig(:gmail, :app_password),
-    :authentication => 'login'
+    enable_starttls_auto: true,
+    address: 'smtp.gmail.com',
+    port: 587,
+    domain: 'gmail.com',
+    user_name: Rails.application.credentials.dig(:gmail, :email),
+    password: Rails.application.credentials.dig(:gmail, :app_password),
+    authentication: 'login'
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
