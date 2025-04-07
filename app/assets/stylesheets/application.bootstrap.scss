@@ -4,3 +4,23 @@
 .navbar {
   --bs-navbar-padding-y: 0.4rem;
 }
+
+.form-border {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.form-border:before,
+.form-border:after {
+  content: '';
+  height: 1px; /* 線の高さ */
+  flex-grow: 1; /* 横幅いっぱい */
+  background-color: rgb(0 0 0 / 0.1);
+}
+.form-border:before {
+  margin-right: 10px; /* 文字との余白 */
+}
+.form-border:after {
+  margin-left: 10px; /* 文字との余白 */
+}
