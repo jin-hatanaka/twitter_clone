@@ -22,11 +22,12 @@ div.rounded-3.border.mx-auto.mt-5.mb-3 style="width: 600px"
         = f.password_field :password_confirmation, class: "form-control", placeholder: "パスワード確認用"
       div.mb-2.mt-5
         = f.submit "登録する", class: "btn btn-primary w-100"
-      p.form-border
-        |または
-      div.mb-3.mt-2
-        - if devise_mapping.omniauthable?
-          - resource_class.omniauth_providers.each do |provider|
-            = link_to omniauth_authorize_path(resource_name, provider), data: { turbo: false }, method: :post, class: "btn btn-secondary w-100" do
-              i.bi.bi-github.me-1
-              | Githubで登録
+        
+    p.form-border
+      |または
+    div.mb-3.mt-2
+      - if devise_mapping.omniauthable?
+        - resource_class.omniauth_providers.each do |provider|
+          = button_to omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "btn btn-secondary w-100" do
+            i.bi.bi-github.me-1
+            | Githubでログイン
