@@ -60,5 +60,21 @@ module Users
     def after_inactive_sign_up_path_for(_resource)
       new_user_session_path
     end
+
+    # 新規登録時、OAuthを使用しない場合にuidを埋める処理
+    # hashをもとにresourceの新しいインスタンスを作る
+    def build_resource(hash = {})
+      hash[:uid] = User.create_unique_string
+      super
+    end
+
+    # 現在のパスワード入力なしでプロフィールを編集できるようにする処理
+    def update_resource(resource, params)
+      # オーバーライド元のメソッドを呼び出す
+      return super if params['password'].present?
+
+      # 現在のパスワードなしでアカウントの更新をする
+      resource.update_without_password(params.except('current_password'))
+    end
   end
 end
