@@ -30,5 +30,8 @@ module Myapp
       g.template_engine :slim
     end
     config.action_view.default_form_builder = 'ApplicationFormBuilder'
+    config.active_storage.variant_processor = :mini_magick
+    config.time_zone = 'Tokyo'
+    config.i18n.default_locale = :ja
   end
 end

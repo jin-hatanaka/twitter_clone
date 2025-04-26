@@ -7,6 +7,19 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :confirmable, :lockable, :timeoutable, :trackable, :omniauthable, omniauth_providers: %i[github]
 
+  has_many :tweets
+  has_one_attached :icon_image
+
+  # フォローする側からのhas_many
+  has_many :relationships, foreign_key: :following_id
+  # 一覧画面で使用する（あるユーザーがフォローしている人全員をとってる->つまり、あるユーザーがフォローされている人をとってくる）
+  has_many :followings, through: :relationships, source: :follower
+
+  # フォローされる側からのhas_many
+  has_many :reverse_of_relationships, class_name: 'Relationship', foreign_key: :follower_id
+  # 一覧画面で使用する（あるユーザーのフォロワー全員をとってくる->つまり、あるユーザーをフォローしている人をとってくる）
+  has_many :followers, through: :reverse_of_relationships, source: :following
+
   with_options presence: true do
     validates :email
     validates :phone_number
@@ -34,5 +47,18 @@ class User < ApplicationRecord
 
   def self.create_unique_string
     SecureRandom.uuid
+  end
+
+  def following_user_tweets
+    following_users = followings.with_attached_icon_image
+
+    following_user_tweets = []
+    following_users.each do |user|
+      user.tweets.all.with_attached_images.each do |tweet|
+        following_user_tweets << tweet
+      end
+    end
+
+    following_user_tweets.sort_by { |date| date[:created_at] }.reverse
   end
 end

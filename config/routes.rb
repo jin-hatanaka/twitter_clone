@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'tweets/index'
-  get 'tweets/show'
-  get 'tweets/new'
-  get 'tweets/edit'
+  # get 'tweets/index'
+  # get 'tweets/show'
+  # get 'tweets/new'
+  # get 'tweets/edit'
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     registrations: 'users/registrations',
@@ -17,4 +17,5 @@ Rails.application.routes.draw do
   # root "articles#index"
   root 'tweets#index'
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
+  resources :tweets
 end
