@@ -51,7 +51,7 @@ gem 'bootsnap', require: false
 # gem "sassc-rails"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem 'image_processing', '~> 1.2'
 
 # Use slim
 gem 'html2slim-ruby3'
@@ -67,6 +67,13 @@ gem 'dotenv-rails'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-rails_csrf_protection'
+
+# Use kaminari for pagination
+gem 'bootstrap5-kaminari-views'
+gem 'kaminari'
+
+# Use Amazon S3
+gem 'aws-sdk-s3', require: false
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

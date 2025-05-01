@@ -1,10 +1,16 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
 
+/* headerの設定 */
 .navbar {
   --bs-navbar-padding-y: 0.4rem;
+
+  .container {
+    padding: 0px 52px;
+  }
 }
 
+/* サインアップ、ログインページの設定 */
 .form-border {
   display: flex;
   align-items: center;
@@ -23,4 +29,257 @@
 }
 .form-border:after {
   margin-left: 10px; /* 文字との余白 */
+}
+
+/* トップページの設定 */
+.toppage-container {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 19% 42% 25%;
+}
+
+/* navの設定 */
+ul {
+  margin: 0;
+  padding: 3px 0 0 0;
+
+  li {
+    list-style: none;
+
+    .nav-btn {
+      border-radius: 25px;
+      border: none;
+      display: flex;
+      align-items: center;
+      padding: 6px 18px;
+      background-color: inherit;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(0 0 0 / 0.1);
+      }
+
+      i {
+        font-size: 26.25px;
+        margin-right: 15px;
+      }
+
+      span {
+        font-size: 20px;
+      }
+    }
+
+    .post-btn {
+      background-color: black;
+      padding: 12px 72px;
+      border-radius: 25px;
+      margin: 8px 0 30px 0;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(0 0 0 / 0.85);
+      }
+
+      span {
+        color: #fff;
+        font-size: 17px;
+        font-weight: bold;
+      }
+    }
+
+    .nav-user-info-btn {
+      width: 259px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      border-radius: 50px;
+      border: none;
+      background-color: inherit;
+      padding: 10px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(0 0 0 / 0.1);
+      }
+
+      .user-img {
+        border-radius: 50%;
+      }
+
+      .nav-user-info-name {
+        width: 100px;
+        text-align: left;
+        padding-left: 10px;
+        font-size: 15px;
+        font-weight: bold;
+      }
+
+      .nav-user-info-dots {
+        width: 100px;
+        text-align: right;
+        padding-right: 5px;
+      }
+    }
+  }
+}
+
+/* asideの設定 */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-left: 23px;
+
+  .search {
+    input {
+      border-radius: 25px;
+      margin-top: 5px;
+    }
+  }
+
+  .now-find {
+    width: 100%;
+    height: 250px;
+    border: solid 1px rgb(0 0 0 / 0.1);
+    border-radius: 15px;
+
+    p {
+      font-size: 20px;
+      font-weight: bold;
+      padding: 10px 12px;
+    }
+  }
+
+  .recommend-user {
+    width: 100%;
+    height: 250px;
+    border: solid 1px rgb(0 0 0 / 0.1);
+    border-radius: 15px;
+
+    p {
+      font-size: 20px;
+      font-weight: bold;
+      padding: 10px 16px;
+    }
+  }
+}
+
+/* mainの設定 */
+.nav-tabs {
+  padding: 0;
+
+  .nav-item {
+    .tab-btn {
+      padding: 8px;
+
+      .link {
+        font-size: 15px;
+        text-decoration: none;
+        color: #536471;
+      }
+    }
+
+    &:hover {
+      background-color: rgba(0 0 0 / 0.1);
+    }
+
+    .active {
+      border-bottom: solid 3px rgb(29, 155, 240);
+
+      .link {
+        font-weight: bold;
+        color: black;
+      }
+    }
+  }
+}
+
+#recommend-tab-pane,
+#follow-tab-pane {
+  height: 682px;
+  overflow-y: scroll;
+}
+
+.post-section,
+.post-display-section {
+  .post-user-img {
+    margin-right: 8px;
+  }
+}
+
+.post-section {
+  padding: 12px 16px 0;
+
+  .post-content {
+    font-size: 20px;
+    margin: 2px 0 12px;
+    border: none;
+    outline: none;
+    resize: none;
+    field-sizing: content;
+    width: 520px;
+  }
+
+  .all-reply {
+    font-size: 14px;
+    padding: 0 0 12px 7px;
+    color: rgb(29, 155, 240);
+    font-weight: bold;
+  }
+
+  .post-icon-list {
+    gap: 18px;
+    color: rgb(29, 155, 240);
+  }
+
+  .post-btn {
+    border: solid 1px black;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 50px;
+    padding: 6px 16px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(0 0 0 / 0.85);
+    }
+  }
+}
+
+.one-post-display {
+  padding: 12px 16px 0;
+
+  .post-username {
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .post-date {
+    font-size: 15px;
+    color: rgb(83, 100, 113);
+  }
+
+  .bi-three-dots {
+    color: rgb(83, 100, 113);
+    font-size: 15px;
+  }
+
+  .post-content {
+    font-size: 15px;
+  }
+
+  .post-img {
+    margin-top: 12px;
+    border-radius: 15px;
+  }
+
+  .post-display-icon-list {
+    gap: 87px;
+    color: rgb(83, 100, 113);
+    padding: 8px 0 12px;
+  }
 }
