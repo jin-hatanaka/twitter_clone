@@ -161,7 +161,7 @@ div.toppage-container
                 div
                   = f.submit "ポストする", class: "post-btn"
         div.post-display-section
-          - @my_following_users_tweets.each do |tweet|
+          - @following_users_tweets.each do |tweet|
             div.one-post-display.border-bottom
               div.d-flex
                 div
@@ -196,7 +196,7 @@ div.toppage-container
                       div
                         i.bi.bi-upload
         div.paginate.d-flex.justify-content-center.my-3
-          = paginate @my_following_users_tweets, :param_name => 'follow', params: {tab: "follow"}, theme: 'bootstrap-5'
+          = paginate @following_users_tweets, :param_name => 'follow', params: {tab: "follow"}, theme: 'bootstrap-5'
 
   aside.aside
     div.search

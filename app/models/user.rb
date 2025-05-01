@@ -7,16 +7,17 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :confirmable, :lockable, :timeoutable, :trackable, :omniauthable, omniauth_providers: %i[github]
 
-  has_many :tweets
+  has_many :tweets, dependent: :destroy
   has_one_attached :icon_image
 
   # フォローする側からのhas_many
-  has_many :relationships, foreign_key: :following_id
+  has_many :relationships, foreign_key: :following_id, dependent: :destroy, inverse_of: :following
   # 一覧画面で使用する（あるユーザーがフォローしている人全員をとってる->つまり、あるユーザーがフォローされている人をとってくる）
   has_many :followings, through: :relationships, source: :follower
 
   # フォローされる側からのhas_many
-  has_many :reverse_of_relationships, class_name: 'Relationship', foreign_key: :follower_id
+  has_many :reverse_of_relationships, class_name: 'Relationship', foreign_key: :follower_id, dependent: :destroy,
+                                      inverse_of: :follower
   # 一覧画面で使用する（あるユーザーのフォロワー全員をとってくる->つまり、あるユーザーをフォローしている人をとってくる）
   has_many :followers, through: :reverse_of_relationships, source: :following
 
@@ -49,16 +50,7 @@ class User < ApplicationRecord
     SecureRandom.uuid
   end
 
-  def following_user_tweets
-    following_users = followings.with_attached_icon_image
-
-    following_user_tweets = []
-    following_users.each do |user|
-      user.tweets.all.with_attached_images.each do |tweet|
-        following_user_tweets << tweet
-      end
-    end
-
-    following_user_tweets.sort_by { |date| date[:created_at] }.reverse
+  def following_user_id
+    followings.map(&:id)
   end
 end
