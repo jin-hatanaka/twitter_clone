@@ -2,7 +2,7 @@ div.toppage-container
   nav.nav
     ul
       li
-        = button_to "/", class: "nav-btn" do
+        = button_to "/", method: :get, class: "nav-btn" do
           i.bi.bi-house-door
           span.icon-name ホーム
       li
@@ -30,7 +30,7 @@ div.toppage-container
           i.bi.bi-lightning
           span.icon-name 認証済み組織
       li
-        = button_to "/", class: "nav-btn" do
+        = button_to profiles_path, method: :get, class: "nav-btn" do
           i.bi.bi-person
           span.icon-name プロフィール
       li
@@ -61,7 +61,7 @@ div.toppage-container
       div class="#{'show active' if params[:tab] == 'recommend'} tab-pane fade" id="recommend-tab-pane"
         div.post-section.d-flex.border-bottom
           div
-            = image_tag current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
+            = link_to image_tag(current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"), profiles_path
           div.w-100
             = form_with model: @tweet do |f|
               = f.text_area :content, class: "post-content", placeholder: "いまどうしてる？"
@@ -102,7 +102,7 @@ div.toppage-container
                       = tweet.user.name
                     span.post-date.me-auto
                       | ・
-                      = tweet.created_at.to_fs(:datetime_jp)
+                      = tweet.created_at.to_fs(:date_jp)
                     i.bi.bi-three-dots
                   div.post-content
                     span
@@ -114,10 +114,22 @@ div.toppage-container
                   div.d-flex.post-display-icon-list
                     div
                       i.bi.bi-chat
+                      span
+                        = tweet.comments.count
                     div
-                      i.bi.bi-arrow-repeat
-                    div
-                      i.bi.bi-heart
+                      - if tweet.retweeted_by?(current_user)
+                        i.bi.bi-arrow-repeat.active
+                      - else
+                        i.bi.bi-arrow-repeat
+                      span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
+                        = tweet.retweets.count
+                    div.d-flex.align-items-center
+                      - if tweet.liked_by?(current_user)
+                        i.bi.bi-heart-fill
+                      - else
+                        i.bi.bi-heart
+                      span class="#{'liked' if tweet.liked_by?(current_user)}"
+                        = tweet.likes.count
                     div
                       i.bi.bi-bar-chart-fill
                     div.d-flex.ms-auto
@@ -131,7 +143,7 @@ div.toppage-container
       div class="#{'show active' if params[:tab] == 'follow'} tab-pane fade" id="follow-tab-pane"
         div.post-section.d-flex.border-bottom
           div
-            = image_tag current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
+            = link_to image_tag(current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"), profiles_path
           div.w-100
             = form_with model: @tweet do |f|
               = f.text_area :content, class: "post-content", placeholder: "いまどうしてる？"
@@ -161,7 +173,7 @@ div.toppage-container
                 div
                   = f.submit "ポストする", class: "post-btn"
         div.post-display-section
-          - @following_users_tweets.each do |tweet|
+          - @following_user_tweets.each do |tweet|
             div.one-post-display.border-bottom
               div.d-flex
                 div
@@ -172,7 +184,7 @@ div.toppage-container
                       = tweet.user.name
                     span.post-date.me-auto
                       | ・
-                      = tweet.created_at.to_fs(:datetime_jp)
+                      = tweet.created_at.to_fs(:date_jp)
                     i.bi.bi-three-dots
                   div.post-content
                     span
@@ -184,10 +196,22 @@ div.toppage-container
                   div.d-flex.post-display-icon-list
                     div
                       i.bi.bi-chat
+                      span
+                        = tweet.comments.count
                     div
-                      i.bi.bi-arrow-repeat
-                    div
-                      i.bi.bi-heart
+                      - if tweet.retweeted_by?(current_user)
+                        i.bi.bi-arrow-repeat.active
+                      - else
+                        i.bi.bi-arrow-repeat
+                      span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
+                        = tweet.retweets.count
+                    div.d-flex.align-items-center
+                      - if tweet.liked_by?(current_user)
+                        i.bi.bi-heart-fill
+                      - else
+                        i.bi.bi-heart
+                      span class="#{'liked' if tweet.liked_by?(current_user)}"
+                        = tweet.likes.count
                     div
                       i.bi.bi-bar-chart-fill
                     div.d-flex.ms-auto
@@ -196,7 +220,7 @@ div.toppage-container
                       div
                         i.bi.bi-upload
         div.paginate.d-flex.justify-content-center.my-3
-          = paginate @following_users_tweets, :param_name => 'follow', params: {tab: "follow"}, theme: 'bootstrap-5'
+          = paginate @following_user_tweets, :param_name => 'follow', params: {tab: "follow"}, theme: 'bootstrap-5'
 
   aside.aside
     div.search
