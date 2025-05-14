@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_12_020024) do
     t.integer "tweet_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "tweet_id"], name: "index_likes_on_user_id_and_tweet_id", unique: true
   end
 
   create_table "relationships", force: :cascade do |t|
@@ -69,6 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_12_020024) do
     t.integer "tweet_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "tweet_id"], name: "index_retweets_on_user_id_and_tweet_id", unique: true
   end
 
   create_table "tasks", force: :cascade do |t|

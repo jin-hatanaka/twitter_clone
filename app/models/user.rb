@@ -31,7 +31,7 @@ class User < ApplicationRecord
   # ユーザーがリツイートしたツイートをとってくる
   has_many :retweet_tweets, through: :retweets, source: :tweet
 
-  # ユーザーがコメンtしたツイートをとってくる
+  # ユーザーがコメントしたツイートをとってくる
   has_many :comment_tweets, through: :comments, source: :tweet
 
   with_options presence: true do

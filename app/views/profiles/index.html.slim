@@ -1,53 +1,5 @@
 div.toppage-container
-  nav.nav
-    ul
-      li
-        = button_to "/", method: :get, class: "nav-btn" do
-          i.bi.bi-house-door
-          span.icon-name ホーム
-      li
-        = button_to "/", class: "nav-btn" do
-          i.bi.bi-search
-          span.icon-name 話題を検索
-      li
-        = button_to "/", class: "nav-btn" do
-          i.bi.bi-bell
-          span.icon-name 通知
-      li
-        = button_to "/", class: "nav-btn" do
-          i.bi.bi-envelope
-          span.icon-name メッセージ
-      li
-        = button_to "/", class: "nav-btn" do
-          i.bi.bi-bookmark
-          span.icon-name ブックマーク
-      li
-        = button_to "/", class: "nav-btn" do
-          i.bi.bi-people
-          span.icon-name コミュニティ
-      li
-        = button_to "/", class: "nav-btn" do
-          i.bi.bi-lightning
-          span.icon-name 認証済み組織
-      li
-        = button_to profiles_path, method: :get, class: "nav-btn" do
-          i.bi.bi-person
-          span.icon-name プロフィール
-      li
-        = button_to "/", class: "nav-btn" do
-          i.bi.bi-three-dots
-          span.icon-name もっと見る
-      li
-        button.btn.post-btn 
-          span ポストする
-      li
-        div.nav-user-info
-          = button_to "/", class: "nav-user-info-btn" do
-            = image_tag current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "user-img"
-            div.nav-user-info-name
-              = current_user.name
-            div.nav-user-info-dots
-              i.bi.bi-three-dots
+  = render 'layouts/sidebar'
   main.main.border-start.border-end
     div.profile-bar.d-flex
       div.d-flex.align-items-center
@@ -118,215 +70,23 @@ div.toppage-container
         
         #myTabContent.tab-content
           div class="#{'show active' if params[:tab] == 'tweet'} tab-pane fade" id="tweet-tab-pane"
-            div.post-display-section
-              - @tweets.each do |tweet|
-                div.one-post-display.border-bottom
-                  div.d-flex
-                    div
-                      = image_tag tweet.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
-                    div.w-100
-                      div.d-flex
-                        span.post-username
-                          = tweet.user.name
-                        span.post-date.me-auto
-                          | ・
-                          = tweet.created_at.to_fs(:date_jp)
-                        i.bi.bi-three-dots
-                      div.post-content
-                        span
-                          = tweet.content
-                      div.post-img-wrapper
-                        - if tweet.images.attached?
-                          - tweet.images.each do |image|
-                            = image_tag image.variant(gravity: :center, resize:"500x270^", crop:"500x270+0+0").processed, class: "post-img"
-                      div.d-flex.post-display-icon-list
-                        div
-                          i.bi.bi-chat
-                          span
-                            = tweet.comments.count
-                        div
-                          - if tweet.retweeted_by?(current_user)
-                            i.bi.bi-arrow-repeat.active
-                          - else
-                            i.bi.bi-arrow-repeat
-                          span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
-                            = tweet.retweets.count
-                        div.d-flex.align-items-center
-                          - if tweet.liked_by?(current_user)
-                            i.bi.bi-heart-fill
-                          - else
-                            i.bi.bi-heart
-                          span class="#{'liked' if tweet.liked_by?(current_user)}"
-                            = tweet.likes.count
-                        div
-                          i.bi.bi-bar-chart-fill
-                        div.d-flex.ms-auto
-                          div
-                            i.bi.bi-bookmark.me-3
-                          div
-                            i.bi.bi-upload
+            = render partial: 'layouts/post', collection: @tweets, as: "tweet"
             div.paginate.d-flex.justify-content-center.my-3
               = paginate @tweets, :param_name => 'tweet', params: {tab: "tweet"}, theme: 'bootstrap-5'
           
           div class="#{'show active' if params[:tab] == 'like'} tab-pane fade" id="like-tab-pane"
-            div.post-display-section
-              - @like_tweets.each do |tweet|
-                div.one-post-display.border-bottom
-                  div.d-flex
-                    div
-                      = image_tag tweet.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
-                    div.w-100
-                      div.d-flex
-                        span.post-username
-                          = tweet.user.name
-                        span.post-date.me-auto
-                          | ・
-                          = tweet.created_at.to_fs(:date_jp)
-                        i.bi.bi-three-dots
-                      div.post-content
-                        span
-                          = tweet.content
-                      div.post-img-wrapper
-                        - if tweet.images.attached?
-                          - tweet.images.each do |image|
-                            = image_tag image.variant(gravity: :center, resize:"500x270^", crop:"500x270+0+0").processed, class: "post-img"
-                      div.d-flex.post-display-icon-list
-                        div
-                          i.bi.bi-chat
-                          span
-                            = tweet.comments.count
-                        div
-                          - if tweet.retweeted_by?(current_user)
-                            i.bi.bi-arrow-repeat.active
-                          - else
-                            i.bi.bi-arrow-repeat
-                          span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
-                            = tweet.retweets.count
-                        div.d-flex.align-items-center
-                          - if tweet.liked_by?(current_user)
-                            i.bi.bi-heart-fill
-                          - else
-                            i.bi.bi-heart
-                          span class="#{'liked' if tweet.liked_by?(current_user)}"
-                            = tweet.likes.count
-                        div
-                          i.bi.bi-bar-chart-fill
-                        div.d-flex.ms-auto
-                          div
-                            i.bi.bi-bookmark.me-3
-                          div
-                            i.bi.bi-upload
+            = render partial: 'layouts/post', collection: @like_tweets, as: "tweet"
             div.paginate.d-flex.justify-content-center.my-3
               = paginate @like_tweets, :param_name => 'like', params: {tab: "like"}, theme: 'bootstrap-5'
 
           div class="#{'show active' if params[:tab] == 'retweet'} tab-pane fade" id="retweet-tab-pane"
-            div.post-display-section
-              - @retweet_tweets.each do |tweet|
-                div.one-post-display.border-bottom
-                  div.d-flex
-                    div
-                      = image_tag tweet.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
-                    div.w-100
-                      div.d-flex
-                        span.post-username
-                          = tweet.user.name
-                        span.post-date.me-auto
-                          | ・
-                          = tweet.created_at.to_fs(:date_jp)
-                        i.bi.bi-three-dots
-                      div.post-content
-                        span
-                          = tweet.content
-                      div.post-img-wrapper
-                        - if tweet.images.attached?
-                          - tweet.images.each do |image|
-                            = image_tag image.variant(gravity: :center, resize:"500x270^", crop:"500x270+0+0").processed, class: "post-img"
-                      div.d-flex.post-display-icon-list
-                        div
-                          i.bi.bi-chat
-                          span
-                            = tweet.comments.count
-                        div
-                          - if tweet.retweeted_by?(current_user)
-                            i.bi.bi-arrow-repeat.active
-                          - else
-                            i.bi.bi-arrow-repeat
-                          span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
-                            = tweet.retweets.count
-                        div.d-flex.align-items-center
-                          - if tweet.liked_by?(current_user)
-                            i.bi.bi-heart-fill
-                          - else
-                            i.bi.bi-heart
-                          span class="#{'liked' if tweet.liked_by?(current_user)}"
-                            = tweet.likes.count
-                        div
-                          i.bi.bi-bar-chart-fill
-                        div.d-flex.ms-auto
-                          div
-                            i.bi.bi-bookmark.me-3
-                          div
-                            i.bi.bi-upload
+            = render partial: 'layouts/post', collection: @retweet_tweets, as: "tweet"
             div.paginate.d-flex.justify-content-center.my-3
               = paginate @retweet_tweets, :param_name => 'retweet', params: {tab: "retweet"}, theme: 'bootstrap-5'
 
           div class="#{'show active' if params[:tab] == 'comment'} tab-pane fade" id="comment-tab-pane"
-            div.post-display-section
-              - @comment_tweets.each do |tweet|
-                div.one-post-display.border-bottom
-                  div.d-flex
-                    div
-                      = image_tag tweet.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
-                    div.w-100
-                      div.d-flex
-                        span.post-username
-                          = tweet.user.name
-                        span.post-date.me-auto
-                          | ・
-                          = tweet.created_at.to_fs(:date_jp)
-                        i.bi.bi-three-dots
-                      div.post-content
-                        span
-                          = tweet.content
-                      div.post-img-wrapper
-                        - if tweet.images.attached?
-                          - tweet.images.each do |image|
-                            = image_tag image.variant(gravity: :center, resize:"500x270^", crop:"500x270+0+0").processed, class: "post-img"
-                      div.d-flex.post-display-icon-list
-                        div
-                          i.bi.bi-chat
-                          span
-                            = tweet.comments.count
-                        div
-                          - if tweet.retweeted_by?(current_user)
-                            i.bi.bi-arrow-repeat.active
-                          - else
-                            i.bi.bi-arrow-repeat
-                          span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
-                            = tweet.retweets.count
-                        div.d-flex.align-items-center
-                          - if tweet.liked_by?(current_user)
-                            i.bi.bi-heart-fill
-                          - else
-                            i.bi.bi-heart
-                          span class="#{'liked' if tweet.liked_by?(current_user)}"
-                            = tweet.likes.count
-                        div
-                          i.bi.bi-bar-chart-fill
-                        div.d-flex.ms-auto
-                          div
-                            i.bi.bi-bookmark.me-3
-                          div
-                            i.bi.bi-upload
+            = render partial: 'layouts/post', collection: @comment_tweets, as: "tweet"
             div.paginate.d-flex.justify-content-center.my-3
               = paginate @comment_tweets, :param_name => 'comment', params: {tab: "comment"}, theme: 'bootstrap-5'
 
-  aside.aside
-    div.search
-      input.form-control placeholder="検索"
-    div.now-find
-      p 「いま」を見つけよう
-    div.recommend-user
-      p おすすめユーザー
-    div
-      
+  = render 'layouts/aside'

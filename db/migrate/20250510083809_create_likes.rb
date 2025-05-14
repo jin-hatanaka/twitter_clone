@@ -8,5 +8,7 @@ class CreateLikes < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_index :likes, %i[user_id tweet_id], unique: true
   end
 end
