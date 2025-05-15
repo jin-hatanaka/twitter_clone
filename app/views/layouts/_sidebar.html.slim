@@ -1,0 +1,49 @@
+nav.nav
+  ul
+    li
+      = button_to "/", method: :get, class: "nav-btn" do
+        i.bi.bi-house-door
+        span.icon-name ホーム
+    li
+      = button_to "/", class: "nav-btn" do
+        i.bi.bi-search
+        span.icon-name 話題を検索
+    li
+      = button_to "/", class: "nav-btn" do
+        i.bi.bi-bell
+        span.icon-name 通知
+    li
+      = button_to "/", class: "nav-btn" do
+        i.bi.bi-envelope
+        span.icon-name メッセージ
+    li
+      = button_to "/", class: "nav-btn" do
+        i.bi.bi-bookmark
+        span.icon-name ブックマーク
+    li
+      = button_to "/", class: "nav-btn" do
+        i.bi.bi-people
+        span.icon-name コミュニティ
+    li
+      = button_to "/", class: "nav-btn" do
+        i.bi.bi-lightning
+        span.icon-name 認証済み組織
+    li
+      = button_to profiles_path, method: :get, class: "nav-btn" do
+        i.bi.bi-person
+        span.icon-name プロフィール
+    li
+      = button_to "/", class: "nav-btn" do
+        i.bi.bi-three-dots
+        span.icon-name もっと見る
+    li
+      button.btn.post-btn 
+        span ポストする
+    li
+      div.nav-user-info
+        = button_to "/", class: "nav-user-info-btn" do
+          = image_tag current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "user-img"
+          div.nav-user-info-name
+            = current_user.name
+          div.nav-user-info-dots
+            i.bi.bi-three-dots

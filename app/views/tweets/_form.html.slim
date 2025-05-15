@@ -1,0 +1,31 @@
+div.post-section.d-flex.border-bottom
+  div
+    = link_to image_tag(current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"), profiles_path
+  div.w-100
+    = form_with model: tweet do |f|
+      = f.text_area :content, class: "post-content", placeholder: "いまどうしてる？"
+      div.all-reply
+        i.bi.bi-globe-americas.me-1
+        span 全員が返信できます
+      div.d-flex.justify-content-between.pt-2.border-top.pb-2
+        ul.post-icon-list.d-flex
+          li.ms-2
+            div
+              i.bi.bi-card-image
+          li
+            div
+              i.bi.bi-filetype-gif
+          li
+            div
+              i.bi.bi-list-ul
+          li
+            div
+              i.bi.bi-emoji-smile
+          li
+            div
+              i.bi.bi-calendar-event
+          li
+            div
+              i.bi.bi-geo-alt
+        div
+          = f.submit "ポストする", class: "post-btn"

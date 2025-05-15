@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # get 'profiles/index'
+  # get 'profiles/edit'
   # get 'tweets/index'
   # get 'tweets/show'
   # get 'tweets/new'
@@ -18,4 +20,5 @@ Rails.application.routes.draw do
   root 'tweets#index'
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
   resources :tweets
+  resources :profiles, only: %i[index edit]
 end

@@ -8,7 +8,11 @@ class User < ApplicationRecord
          :confirmable, :lockable, :timeoutable, :trackable, :omniauthable, omniauth_providers: %i[github]
 
   has_many :tweets, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :retweets, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_one_attached :icon_image
+  has_one_attached :header_image
 
   # フォローする側からのhas_many
   has_many :relationships, foreign_key: :following_id, dependent: :destroy, inverse_of: :following
@@ -20,6 +24,15 @@ class User < ApplicationRecord
                                       inverse_of: :follower
   # 一覧画面で使用する（あるユーザーのフォロワー全員をとってくる->つまり、あるユーザーをフォローしている人をとってくる）
   has_many :followers, through: :reverse_of_relationships, source: :following
+
+  # ユーザーがいいねしたツイートをとってくる
+  has_many :like_tweets, through: :likes, source: :tweet
+
+  # ユーザーがリツイートしたツイートをとってくる
+  has_many :retweet_tweets, through: :retweets, source: :tweet
+
+  # ユーザーがコメントしたツイートをとってくる
+  has_many :comment_tweets, through: :comments, source: :tweet
 
   with_options presence: true do
     validates :email
@@ -50,7 +63,8 @@ class User < ApplicationRecord
     SecureRandom.uuid
   end
 
-  def following_user_id
+  # フォローしているユーザーのid一覧
+  def following_user_ids
     followings.map(&:id)
   end
 end

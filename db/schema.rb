@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_19_004826) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_12_020024) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,11 +42,35 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_19_004826) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "tweet_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "tweet_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "tweet_id"], name: "index_likes_on_user_id_and_tweet_id", unique: true
+  end
+
   create_table "relationships", force: :cascade do |t|
     t.integer "following_id", null: false
     t.integer "follower_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "retweets", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "tweet_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "tweet_id"], name: "index_retweets_on_user_id_and_tweet_id", unique: true
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -90,6 +114,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_19_004826) do
     t.datetime "updated_at", null: false
     t.string "uid", default: "", null: false
     t.string "provider", default: "", null: false
+    t.text "self_introduction"
+    t.string "place"
+    t.text "website"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["name"], name: "index_users_on_name", unique: true

@@ -1,0 +1,92 @@
+div.toppage-container
+  = render 'layouts/sidebar'
+  main.main.border-start.border-end
+    div.profile-bar.d-flex
+      div.d-flex.align-items-center
+        = button_to "/", method: :get, class: "back-btn" do
+          i.bi.bi-arrow-left
+      div.ms-4
+        div.profile-bar-username
+          | ユーザー1
+        div.posts-number
+          = current_user.tweets.count
+          | 件のポスト
+    div.profile-contents
+      div.header-img-wrapper
+        - if current_user.header_image.attached?
+          = image_tag current_user.header_image.variant(gravity: :center, resize:"603x200^", crop:"603x200+0+0").processed, class: "header-img"
+        - else
+          div.no-header-img
+      div.profile-user-img-wrapper
+        = image_tag current_user.icon_image.variant(resize_to_fill: [134, 134]).processed, class: "profile-user-img"
+      div.profile-info
+        div.d-flex.justify-content-end
+          = button_to "プロフィールを編集", "/", class: "profile-edit-btn"
+        div.profile-username
+          = current_user.name
+        div.self-introduction
+          = simple_format(current_user.self_introduction)
+        div.profile-others
+          - if current_user.place?
+            span
+              i.bi.bi-geo-alt
+              = current_user.place
+          - if current_user.website
+            span
+              i.bi.bi-link-45deg
+              = link_to nil, "#{current_user.website}"
+          span
+            i.bi.bi-balloon
+            | 誕生日: 
+            = current_user.birth_date.to_fs(:yeardate_jp)
+          span
+            i.bi.bi-calendar4-week
+            | 2025年1月からXを利用しています
+        div.d-flex
+          div.follow-number-wrapper
+            span.follow-number
+              = current_user.followings.count
+            span.follow-text
+              | フォロー中
+          div.follow-number-wrapper
+            span.follow-number
+              = current_user.followers.count
+            span.follow-text
+              | フォロワー
+      div.profile-tabs
+        ul#myTab.nav.nav-tabs.nav-justified.nav-underline
+          li.nav-item
+            div class="#{'active' if params[:tab] == 'tweet'} tab-btn" type="button" data-bs-toggle="tab" data-bs-target="#tweet-tab-pane"
+              = link_to 'ツイート', profiles_path(tab: 'tweet'), class: 'link'
+          li.nav-item
+            div class="#{'active' if params[:tab] == 'like'} tab-btn" type="button" data-bs-toggle="tab" data-bs-target="#like-tab-pane"
+              = link_to 'いいね', profiles_path(tab: 'like'), class: 'link'
+          li.nav-item
+            div class="#{'active' if params[:tab] == 'retweet'} tab-btn" type="button" data-bs-toggle="tab" data-bs-target="#retweet-tab-pane"
+              = link_to 'リツイート', profiles_path(tab: 'retweet'), class: 'link'
+          li.nav-item
+            div class="#{'active' if params[:tab] == 'comment'} tab-btn" type="button" data-bs-toggle="tab" data-bs-target="#comment-tab-pane"
+              = link_to 'コメント', profiles_path(tab: 'comment'), class: 'link'
+        
+        #myTabContent.tab-content
+          div class="#{'show active' if params[:tab] == 'tweet'} tab-pane fade" id="tweet-tab-pane"
+            = render partial: 'layouts/post', collection: @tweets, as: "tweet"
+            div.paginate.d-flex.justify-content-center.my-3
+              = paginate @tweets, :param_name => 'tweet', params: {tab: "tweet"}, theme: 'bootstrap-5'
+          
+          div class="#{'show active' if params[:tab] == 'like'} tab-pane fade" id="like-tab-pane"
+            = render partial: 'layouts/post', collection: @like_tweets, as: "tweet"
+            div.paginate.d-flex.justify-content-center.my-3
+              = paginate @like_tweets, :param_name => 'like', params: {tab: "like"}, theme: 'bootstrap-5'
+
+          div class="#{'show active' if params[:tab] == 'retweet'} tab-pane fade" id="retweet-tab-pane"
+            = render partial: 'layouts/post', collection: @retweet_tweets, as: "tweet"
+            div.paginate.d-flex.justify-content-center.my-3
+              = paginate @retweet_tweets, :param_name => 'retweet', params: {tab: "retweet"}, theme: 'bootstrap-5'
+
+          div class="#{'show active' if params[:tab] == 'comment'} tab-pane fade" id="comment-tab-pane"
+            = render partial: 'layouts/post', collection: @comment_tweets, as: "tweet"
+            div.paginate.d-flex.justify-content-center.my-3
+              = paginate @comment_tweets, :param_name => 'comment', params: {tab: "comment"}, theme: 'bootstrap-5'
+
+  = render 'layouts/aside'
