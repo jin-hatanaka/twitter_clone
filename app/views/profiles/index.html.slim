@@ -6,8 +6,8 @@ div.toppage-container
         = button_to "/", method: :get, class: "back-btn" do
           i.bi.bi-arrow-left
       div.ms-4
-        div.profile-bar-username
-          | ユーザー1
+        div.profile-bar-name
+          = current_user.name
         div.posts-number
           = current_user.tweets.count
           | 件のポスト
@@ -21,7 +21,7 @@ div.toppage-container
         = image_tag current_user.icon_image.variant(resize_to_fill: [134, 134]).processed, class: "profile-user-img"
       div.profile-info
         div.d-flex.justify-content-end
-          = button_to "プロフィールを編集", "/", class: "profile-edit-btn"
+          = button_to "プロフィールを編集", edit_profile_path(current_user), method: :get, class: "profile-edit-btn"
         div.profile-username
           = current_user.name
         div.self-introduction
