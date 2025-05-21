@@ -306,7 +306,8 @@ ul {
 }
 
 /* プロフィールページの設定 */
-.profile-bar {
+.profile-bar,
+.profile-edit-bar {
   padding: 0 12px;
 
   .back-btn {
@@ -322,8 +323,10 @@ ul {
       background-color: rgba(0 0 0 / 0.1);
     }
   }
+}
 
-  .profile-bar-username {
+.profile-bar {
+  .profile-bar-name {
     font-weight: bold;
     font-size: 20px;
   }
@@ -365,7 +368,8 @@ ul {
     padding: 12px 16px 0;
     margin: 0 0 16px;
 
-    .profile-edit-btn {
+    .profile-edit-btn,
+    .profile-edit-save-btn {
       border: solid 1px rgb(0 0 0 / 0.15);
       background-color: inherit;
       font-size: 15px;
@@ -378,6 +382,17 @@ ul {
 
       &:hover {
         background-color: rgba(0 0 0 / 0.1);
+      }
+    }
+
+    .profile-edit-save-btn {
+      background-color: black;
+      color: white;
+      width: 80px;
+      height: 36px;
+
+      &:hover {
+        background-color: rgba(0 0 0 / 0.85);
       }
     }
 
@@ -422,5 +437,15 @@ ul {
         color: #536471;
       }
     }
+  }
+}
+
+/* プロフィール編集ページの設定 */
+.profile-edit-bar {
+  height: 49px;
+
+  .profile-edit-bar-name {
+    font-weight: bold;
+    font-size: 20px;
   }
 }

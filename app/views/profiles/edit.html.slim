@@ -1,2 +1,46 @@
-h1 Profiles#edit
-p Find me in app/views/profiles/edit.html.slim
+div.toppage-container
+  = render 'layouts/sidebar'
+  main.main.border-start.border-end
+    div.profile-edit-bar.d-flex.align-items-center
+      div
+        = button_to profiles_path, method: :get, class: "back-btn" do
+          i.bi.bi-arrow-left
+      div.ms-4
+        div.profile-edit-bar-name
+          | プロフィールを編集
+    div.profile-contents
+      div.header-img-wrapper
+        - if current_user.header_image.attached?
+          = image_tag current_user.header_image.variant(gravity: :center, resize:"603x200^", crop:"603x200+0+0").processed, class: "header-img"
+        - else
+          div.no-header-img
+      div.profile-user-img-wrapper
+        = image_tag current_user.icon_image.variant(resize_to_fill: [134, 134]).processed, class: "profile-user-img"
+      div.profile-info
+        = form_with model: @user, url: profile_path do |f|
+          div.d-flex.justify-content-end
+            = f.submit "保存", class: "profile-edit-save-btn"
+          div.mb-3
+            = f.label :name, "名前", class: "form-label"
+            = f.text_field :name, class: "form-control"
+          div.mb-3
+            = f.label :header_image, "ヘッダー画像", class: "form-label"
+            = f.file_field :header_image, class: "form-control"
+          div.mb-3
+            = f.label :icon_image, "アイコン", class: "form-label"
+            = f.file_field :icon_image, class: "form-control"
+          div.mb-3
+            = f.label :self_introduction, "自己紹介", class: "form-label"
+            = f.text_area :self_introduction, class: "form-control", size: "20 x 3"
+          div.mb-3
+            = f.label :place, "場所", class: "form-label"
+            = f.text_field :place, class: "form-control"
+          div.mb-3
+            = f.label :website, "ウェブサイト", class: "form-label"
+            = f.text_field :website, class: "form-control"
+          div.mb-3
+            = f.label :birth_date, "誕生日", class: "form-label"
+            div.d-flex.gap-2.w-100
+              = f.date_select :birth_date, {start_year: 1920, end_year: 2025}, class: "form-control"
+          
+  = render 'layouts/aside'

@@ -20,5 +20,5 @@ Rails.application.routes.draw do
   root 'tweets#index'
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
   resources :tweets
-  resources :profiles, only: %i[index edit]
+  resources :profiles
 end
