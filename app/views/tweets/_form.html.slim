@@ -2,7 +2,7 @@ div.post-section.d-flex.border-bottom
   div
     = link_to image_tag(current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"), profiles_path
   div.w-100
-    = form_with model: tweet do |f|
+    = form_with model: tweet, url: tweets_path do |f|
       = f.text_area :content, class: "post-content", placeholder: "いまどうしてる？"
       div.all-reply
         i.bi.bi-globe-americas.me-1
@@ -11,7 +11,9 @@ div.post-section.d-flex.border-bottom
         ul.post-icon-list.d-flex
           li.ms-2
             div
-              i.bi.bi-card-image
+              = f.label :images
+                i.bi.bi-card-image style="cursor: pointer"
+                = f.file_field :images, multiple: true, style: "display: none"
           li
             div
               i.bi.bi-filetype-gif

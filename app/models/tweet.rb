@@ -7,6 +7,8 @@ class Tweet < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many_attached :images
 
+  validates :content, length: { maximum: 140 }
+
   # tweetに結びついているいいね(like)の中で今いいねしようとしているuser_idが存在するか
   def liked_by?(user)
     likes.exists?(user_id: user.id)
