@@ -18,8 +18,7 @@ class TweetsController < ApplicationController
   def edit; end
 
   def create
-    @tweet = Tweet.new(tweet_params)
-    @tweet.user_id = current_user.id
+    @tweet = current_user.tweets.build(tweet_params)
     if @tweet.save
       redirect_to request.referer, notice: 'ポストしました。'
     else
