@@ -13,7 +13,7 @@ div.post-display-section
           i.bi.bi-three-dots
         div.post-content
           span
-            = tweet.content
+            = simple_format(tweet.content, class: "simple_format")
         div.post-img-wrapper
           - if tweet.images.attached?
             - tweet.images.each do |image|

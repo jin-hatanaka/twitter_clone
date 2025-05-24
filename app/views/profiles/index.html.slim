@@ -25,7 +25,7 @@ div.toppage-container
         div.profile-username
           = current_user.name
         div.self-introduction
-          = simple_format(current_user.self_introduction)
+          = simple_format(current_user.self_introduction, class: "simple_format")
         div.profile-others
           - if current_user.place?
             span
