@@ -1,2 +1,100 @@
-h1 Tweets#show
-p Find me in app/views/tweets/show.html.slim
+div.top-container
+  = render 'layouts/sidebar'
+  main.main.border-start.border-end
+    div.bar.d-flex.align-items-center
+      div
+        = link_to session[:previous_url], method: :get, class: "back-btn" do
+          i.bi.bi-arrow-left
+      div.ms-4
+        div.bar-name
+          | ポスト
+    div.post-detail-contents
+      div.post-detail-info
+        div.d-flex
+          div
+            = image_tag @tweet.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
+          div.d-flex.w-100
+            span.post-username.me-auto
+              = @tweet.user.name
+            i.bi.bi-three-dots
+        div.post-detail-content
+          span
+            = simple_format(@tweet.content, class: "simple_format")
+        div.post-img-wrapper
+          - if @tweet.images.attached?
+            - @tweet.images.each do |image|
+              = image_tag image.variant(gravity: :center, resize:"560x300^", crop:"560x300+0+0").processed, class: "post-img"
+        div.post-detail-date.border-bottom
+          = @tweet.created_at.to_fs(:datetime_jp)
+        div.d-flex.post-detail-display-icon-list.border-bottom
+          div
+            i.bi.bi-chat
+            span
+              = @tweet.comments.count
+          div
+            - if @tweet.retweeted_by?(current_user)
+              i.bi.bi-arrow-repeat.active
+            - else
+              i.bi.bi-arrow-repeat
+            span class="#{'retweeted' if @tweet.retweeted_by?(current_user)}"
+              = @tweet.retweets.count
+          div.d-flex.align-items-center
+            - if @tweet.liked_by?(current_user)
+              i.bi.bi-heart-fill
+            - else
+              i.bi.bi-heart
+            span class="#{'liked' if @tweet.liked_by?(current_user)}"
+              = @tweet.likes.count
+          div
+            i.bi.bi-bookmark
+            span
+             | 0
+          div
+            i.bi.bi-upload
+      div.comment-form.d-flex.border-bottom
+        div
+          = link_to image_tag(current_user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"), profiles_path
+        div
+          = form_with model: [@tweet, @comment], url: tweet_comments_path(@tweet) do |f|
+            = f.text_area :content, class: "post-content", placeholder: "返信をポスト"
+            div.d-flex.justify-content-between.pt-2.pb-2
+              ul.post-icon-list.d-flex
+                li.ms-2
+                  div
+                    = f.label :images
+                      i.bi.bi-card-image style="cursor: pointer"
+                      = f.file_field :images, multiple: true, style: "display: none"
+                li
+                  div
+                    i.bi.bi-filetype-gif
+                li
+                  div
+                    i.bi.bi-emoji-smile
+                li
+                  div
+                    i.bi.bi-geo-alt
+              div
+                = f.submit "返信", class: "post-btn"
+      div.comment-display-section
+        - @comments.each do |comment|
+          div.one-post-display.border-bottom
+            div.d-flex
+              div
+                = image_tag comment.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
+              div.w-100
+                div.d-flex
+                  span.post-username
+                    = comment.user.name
+                  span.post-date.me-auto
+                    | ・
+                    = comment.created_at.to_fs(:date_jp)
+                  i.bi.bi-three-dots
+                div.post-content
+                  span
+                    = simple_format(comment.content, class: "simple_format")
+                div.post-img-wrapper
+                  - if comment.images.attached?
+                    - comment.images.each do |image|
+                      = image_tag image.variant(gravity: :center, resize:"500x270^", crop:"500x270+0+0").processed, class: "post-img"
+
+  = render 'layouts/aside'

@@ -1,46 +1,47 @@
 div.post-display-section
-  div.one-post-display.border-bottom
-    div.d-flex
-      div
-        = image_tag tweet.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
-      div.w-100
-        div.d-flex
-          span.post-username
-            = tweet.user.name
-          span.post-date.me-auto
-            | ・
-            = tweet.created_at.to_fs(:date_jp)
-          i.bi.bi-three-dots
-        div.post-content
-          span
-            = simple_format(tweet.content, class: "simple_format")
-        div.post-img-wrapper
-          - if tweet.images.attached?
-            - tweet.images.each do |image|
-              = image_tag image.variant(gravity: :center, resize:"500x270^", crop:"500x270+0+0").processed, class: "post-img"
-        div.d-flex.post-display-icon-list
-          div
-            i.bi.bi-chat
+  = link_to tweet_path(tweet), class: "post-display-link" do
+    div.one-post-display.border-bottom
+      div.d-flex
+        div
+          = image_tag tweet.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
+        div.w-100
+          div.d-flex
+            span.post-username
+              = tweet.user.name
+            span.post-date.me-auto
+              | ・
+              = tweet.created_at.to_fs(:date_jp)
+            i.bi.bi-three-dots
+          div.post-content
             span
-              = tweet.comments.count
-          div
-            - if tweet.retweeted_by?(current_user)
-              i.bi.bi-arrow-repeat.active
-            - else
-              i.bi.bi-arrow-repeat
-            span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
-              = tweet.retweets.count
-          div.d-flex.align-items-center
-            - if tweet.liked_by?(current_user)
-              i.bi.bi-heart-fill
-            - else
-              i.bi.bi-heart
-            span class="#{'liked' if tweet.liked_by?(current_user)}"
-              = tweet.likes.count
-          div
-            i.bi.bi-bar-chart-fill
-          div.d-flex.ms-auto
+              = simple_format(tweet.content, class: "simple_format")
+          div.post-img-wrapper
+            - if tweet.images.attached?
+              - tweet.images.each do |image|
+                = image_tag image.variant(gravity: :center, resize:"500x270^", crop:"500x270+0+0").processed, class: "post-img"
+          div.d-flex.post-display-icon-list
             div
-              i.bi.bi-bookmark.me-3
+              i.bi.bi-chat
+              span
+                = tweet.comments.count
             div
-              i.bi.bi-upload
+              - if tweet.retweeted_by?(current_user)
+                i.bi.bi-arrow-repeat.active
+              - else
+                i.bi.bi-arrow-repeat
+              span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
+                = tweet.retweets.count
+            div.d-flex.align-items-center
+              - if tweet.liked_by?(current_user)
+                i.bi.bi-heart-fill
+              - else
+                i.bi.bi-heart
+              span class="#{'liked' if tweet.liked_by?(current_user)}"
+                = tweet.likes.count
+            div
+              i.bi.bi-bar-chart-fill
+            div.d-flex.ms-auto
+              div
+                i.bi.bi-bookmark.me-3
+              div
+                i.bi.bi-upload
