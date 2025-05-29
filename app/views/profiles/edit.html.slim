@@ -1,12 +1,12 @@
-div.toppage-container
+div.top-container
   = render 'layouts/sidebar'
   main.main.border-start.border-end
-    div.profile-edit-bar.d-flex.align-items-center
+    div.bar.d-flex.align-items-center
       div
-        = button_to profiles_path, method: :get, class: "back-btn" do
+        = link_to profiles_path, method: :get, class: "back-btn" do
           i.bi.bi-arrow-left
       div.ms-4
-        div.profile-edit-bar-name
+        div.bar-name
           | プロフィールを編集
     div.profile-contents
       div.header-img-wrapper

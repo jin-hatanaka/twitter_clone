@@ -3,6 +3,8 @@
 class ProfilesController < ApplicationController
   before_action :set_tweet_tab, only: [:index]
   before_action :set_user, only: %i[edit update]
+  before_action :reset_previous_url, only: [:index]
+  after_action :set_previous_url, only: [:index]
 
   def index
     @tweets = current_user.tweets.order(created_at: 'DESC').page(params[:tweet]).per(2)

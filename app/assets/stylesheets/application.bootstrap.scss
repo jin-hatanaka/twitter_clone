@@ -32,7 +32,7 @@
 }
 
 /* トップページの設定 */
-.toppage-container {
+.top-container {
   display: grid;
   justify-content: center;
   grid-template-columns: 19% 42% 25%;
@@ -202,24 +202,22 @@ ul {
   overflow-y: scroll;
 }
 
-.post-section,
-.post-display-section {
-  .post-user-img {
-    margin-right: 8px;
-    transition: background-color 0.2s;
+.post-user-img {
+  margin-right: 8px;
+  transition: background-color 0.2s;
 
-    &:hover {
-      background-color: rgba(0 0 0 / 0.1);
-    }
+  &:hover {
+    background-color: rgba(0 0 0 / 0.1);
   }
 }
 
-.post-section {
+.post-form,
+.comment-form {
   padding: 12px 16px 0;
 
   .post-content {
     font-size: 20px;
-    margin: 2px 0 12px;
+    margin: 2px 0 8px;
     border: none;
     outline: none;
     resize: none;
@@ -255,25 +253,24 @@ ul {
   }
 }
 
-.one-post-display {
-  padding: 12px 16px 0;
+.post-display-link {
+  text-decoration: none;
+  color: inherit;
 
+  &:hover {
+    color: inherit;
+  }
+}
+
+.one-post-display,
+.post-detail-info {
   .post-username {
     font-size: 15px;
     font-weight: bold;
   }
 
-  .post-date {
-    font-size: 15px;
-    color: rgb(83, 100, 113);
-  }
-
   .bi-three-dots {
     color: rgb(83, 100, 113);
-    font-size: 15px;
-  }
-
-  .post-content {
     font-size: 15px;
   }
 
@@ -282,7 +279,14 @@ ul {
     border-radius: 15px;
   }
 
-  .post-display-icon-list {
+  .post-date,
+  .post-detail-date {
+    font-size: 15px;
+    color: rgb(83, 100, 113);
+  }
+
+  .post-display-icon-list,
+  .post-detail-display-icon-list {
     gap: 87px;
     color: rgb(83, 100, 113);
     padding: 8px 0 12px;
@@ -302,31 +306,50 @@ ul {
       font-size: 13px;
       padding: 0 4px;
     }
-  }
-}
 
-/* プロフィールページの設定 */
-.profile-bar,
-.profile-edit-bar {
-  padding: 0 12px;
-
-  .back-btn {
-    border: none;
-    background-color: inherit;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    font-size: 20px;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: rgba(0 0 0 / 0.1);
+    * {
+      display: flex;
+      align-items: center;
     }
   }
 }
 
-.profile-bar {
-  .profile-bar-name {
+.one-post-display {
+  padding: 12px 16px 0;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0 0 0 / 0.03);
+  }
+
+  .post-content {
+    font-size: 15px;
+  }
+}
+
+/* プロフィールページの設定 */
+.bar {
+  padding: 0 12px;
+  height: 50px;
+
+  .back-btn {
+    text-decoration: none;
+    color: inherit;
+    padding: 5px 7px;
+    border-radius: 50%;
+    font-size: 20px;
+    transition: background-color 0.2s;
+    height: 35px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: rgba(0 0 0 / 0.1);
+      color: inherit;
+    }
+  }
+
+  .bar-name {
     font-weight: bold;
     font-size: 20px;
   }
@@ -444,12 +467,38 @@ ul {
   margin: 0;
 }
 
-/* プロフィール編集ページの設定 */
-.profile-edit-bar {
-  height: 49px;
+/* ツイート詳細ページの設定 */
+.post-detail-contents {
+  overflow-y: scroll;
+  height: 674px;
 
-  .profile-edit-bar-name {
-    font-weight: bold;
-    font-size: 20px;
+  .post-detail-info {
+    padding: 0 16px;
+    margin: 12px 0 0;
+
+    .post-detail-content {
+      margin: 12px 0 0;
+      font-size: 17px;
+    }
+
+    .post-detail-date {
+      padding: 16px 0;
+    }
+
+    .post-detail-display-icon-list {
+      gap: 100px;
+      justify-content: center;
+      font-size: 18px;
+      padding: 0;
+      height: 46px;
+    }
+  }
+
+  .comment-display-section {
+    margin: 0 0 200px;
+
+    .one-post-display {
+      padding-bottom: 12px;
+    }
   }
 }
