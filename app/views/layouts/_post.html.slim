@@ -26,16 +26,20 @@ div.post-display-section
                 = tweet.comments.count
             div
               - if tweet.retweeted_by?(current_user)
-                i.bi.bi-arrow-repeat.active
+                = link_to root_path do
+                  i.bi.bi-arrow-repeat.active
               - else
-                i.bi.bi-arrow-repeat
+                = link_to root_path do
+                  i.bi.bi-arrow-repeat
               span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
                 = tweet.retweets.count
             div.d-flex.align-items-center
               - if tweet.liked_by?(current_user)
-                i.bi.bi-heart-fill
+                = link_to tweet_likes_path(tweet.id), data: { turbo_method: :delete } do
+                  i.bi.bi-heart-fill
               - else
-                i.bi.bi-heart
+                = link_to tweet_likes_path(tweet.id), data: { turbo_method: :post } do
+                  i.bi.bi-heart
               span class="#{'liked' if tweet.liked_by?(current_user)}"
                 = tweet.likes.count
             div
