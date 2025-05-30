@@ -9,7 +9,8 @@ class Tweet < ApplicationRecord
 
   validates :content, length: { maximum: 140 }
 
-  # tweetに結びついているいいね(like)の中で今いいねしようとしているuser_idが存在するか
+  # ユーザーがツイートをいいねしたかどうかを判定するメソッド。
+  # tweetに結びついているいいね(like)の中で今いいねしようとしているuser_idが存在するか判定している。
   def liked_by?(user)
     likes.exists?(user_id: user.id)
   end
