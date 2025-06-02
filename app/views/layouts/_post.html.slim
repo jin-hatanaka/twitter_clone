@@ -26,10 +26,10 @@ div.post-display-section
                 = tweet.comments.count
             div
               - if tweet.retweeted_by?(current_user)
-                = link_to root_path do
+                = link_to tweet_retweets_path(tweet.id), data: { turbo_method: :delete } do
                   i.bi.bi-arrow-repeat.active
               - else
-                = link_to root_path do
+                = link_to tweet_retweets_path(tweet.id), data: { turbo_method: :post } do
                   i.bi.bi-arrow-repeat
               span class="#{'retweeted' if tweet.retweeted_by?(current_user)}"
                 = tweet.retweets.count
