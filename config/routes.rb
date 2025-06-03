@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resources :tweets do
     resources :comments, only: [:create]
     resource :likes, only: %i[create destroy]
+    resource :retweets, only: %i[create destroy]
   end
   resources :profiles
 end
