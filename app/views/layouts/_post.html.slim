@@ -8,10 +8,24 @@ div.post-display-section
           div.d-flex
             span.post-username
               = tweet.user.name
-            span.post-date.me-auto
+            span.post-date
               | ・
               = tweet.created_at.to_fs(:date_jp)
-            i.bi.bi-three-dots
+            div.dropdown.ms-auto
+              = link_to("#", role: "button", "data-bs-toggle": "dropdown", "aria-expanded": "false") do
+                i.bi.bi-three-dots
+              - if current_user != tweet.user
+                ul.dropdown-menu
+                  - if tweet.user.followed_by?(current_user)
+                    li
+                      = link_to user_relationships_path(tweet.user.id), data: { turbo_method: :delete }, class: "dropdown-item" do
+                        = tweet.user.name
+                        | さんのフォローを解除
+                  - else
+                    li
+                      = link_to user_relationships_path(tweet.user.id), data: { turbo_method: :post }, class: "dropdown-item" do
+                        = tweet.user.name
+                        | さんをフォロー
           div.post-content
             span
               = simple_format(tweet.content, class: "simple_format")

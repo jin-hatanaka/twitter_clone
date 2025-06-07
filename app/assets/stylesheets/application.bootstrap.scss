@@ -253,12 +253,22 @@ ul {
   }
 }
 
+.post-display-section {
+  position: relative;
+}
+
 .post-display-link {
   text-decoration: none;
   color: inherit;
 
   &:hover {
     color: inherit;
+  }
+
+  &::before {
+    content: ''; // ←これがないと擬似要素として作られない
+    position: absolute;
+    inset: 0; // 画面全体を覆う
   }
 }
 
@@ -269,9 +279,19 @@ ul {
     font-weight: bold;
   }
 
+  .dropdown a {
+    position: relative;
+    z-index: 1;
+  }
+
   .bi-three-dots {
     color: rgb(83, 100, 113);
     font-size: 15px;
+  }
+
+  .dropdown-item {
+    font-size: 15px;
+    font-weight: bold;
   }
 
   .post-img {
@@ -315,6 +335,8 @@ ul {
     a {
       text-decoration: none;
       color: inherit;
+      position: relative;
+      z-index: 1;
     }
   }
 }

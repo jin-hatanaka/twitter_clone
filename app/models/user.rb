@@ -67,4 +67,10 @@ class User < ApplicationRecord
   def following_user_ids
     followings.map(&:id)
   end
+
+  # ユーザーがフォロー済みかどうか判定するメソッド
+  # あるユーザが引数で渡されたuserにフォローされているか調べるメソッド
+  def followed_by?(user)
+    reverse_of_relationships.find_by(following_id: user.id).present?
+  end
 end
