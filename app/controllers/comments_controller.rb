@@ -3,7 +3,7 @@
 class CommentsController < ApplicationController
   def create
     @tweet = Tweet.find(params[:tweet_id])
-    # @tweetに関連づけられたCommentモデルの新しいインスタンスを作成
+    # @tweetに関連づけられたCommentクラスの新しいインスタンスを作成
     @comment = @tweet.comments.build(comment_params)
     @comment.user_id = current_user.id
     @comment.save
