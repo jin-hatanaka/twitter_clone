@@ -50,9 +50,14 @@ div.top-container
             span class="#{'liked' if @tweet.liked_by?(current_user)}"
               = @tweet.likes.count
           div
-            i.bi.bi-bookmark
-            span
-             | 0
+            -if @tweet.bookmarked_by?(current_user)
+              = link_to tweet_bookmarks_path(@tweet.id), data: { turbo_method: :delete } do
+                i.bi.bi-bookmark-fill
+            - else
+              = link_to tweet_bookmarks_path(@tweet.id), data: { turbo_method: :post } do
+                i.bi.bi-bookmark
+            span class="#{'bookmarked' if @tweet.bookmarked_by?(current_user)}"
+              = @tweet.bookmarks.count 
           div
             i.bi.bi-upload
       div.comment-form.d-flex.border-bottom

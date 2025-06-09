@@ -1,0 +1,14 @@
+div.top-container
+  = render 'layouts/sidebar'
+  main.main.border-start.border-end
+    div.bar.d-flex.align-items-center
+      div
+        = link_to "/", method: :get, class: "back-btn" do
+          i.bi.bi-arrow-left
+      div.ms-4
+        div.bar-name
+          | ブックマーク
+    div.bookmark-contents
+      = render partial: 'layouts/post', collection:  @bookmark_tweets, as: "tweet"
+
+  = render 'layouts/aside'

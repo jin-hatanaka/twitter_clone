@@ -60,6 +60,11 @@ div.post-display-section
               i.bi.bi-bar-chart-fill
             div.d-flex.ms-auto
               div
-                i.bi.bi-bookmark.me-3
+                -if tweet.bookmarked_by?(current_user)
+                  = link_to tweet_bookmarks_path(tweet.id), data: { turbo_method: :delete } do
+                    i.bi.bi-bookmark-fill.me-3
+                - else
+                  = link_to tweet_bookmarks_path(tweet.id), data: { turbo_method: :post } do
+                    i.bi.bi-bookmark.me-3
               div
                 i.bi.bi-upload

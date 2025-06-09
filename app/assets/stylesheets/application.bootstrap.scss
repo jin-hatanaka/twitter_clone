@@ -322,6 +322,11 @@ ul {
       color: red;
     }
 
+    .bi-bookmark-fill,
+    .bookmarked {
+      color: rgb(29, 155, 240);
+    }
+
     span {
       font-size: 13px;
       padding: 0 4px;
@@ -387,10 +392,15 @@ ul {
   }
 }
 
-.profile-contents {
-  position: relative;
+.profile-contents,
+.post-detail-contents,
+.bookmark-contents {
   overflow-y: scroll;
   height: 674px;
+}
+
+.profile-contents {
+  position: relative;
 
   .no-header-img {
     background-color: rgb(218, 218, 218);
@@ -496,9 +506,6 @@ ul {
 
 /* ツイート詳細ページの設定 */
 .post-detail-contents {
-  overflow-y: scroll;
-  height: 674px;
-
   .post-detail-info {
     padding: 0 16px;
     margin: 12px 0 0;
@@ -528,4 +535,9 @@ ul {
       padding-bottom: 12px;
     }
   }
+}
+
+/* ブックマーク一覧ページの設定 */
+.bookmark-contents {
+  padding: 0 0 200px;
 }
