@@ -17,7 +17,7 @@ class ProfilesController < ApplicationController
 
   def update
     @user.update!(user_params)
-    redirect_to profiles_path, notice: 'プロフィールを更新しました。'
+    redirect_to profiles_path, notice: 'プロフィールを更新しました'
   end
 
   private

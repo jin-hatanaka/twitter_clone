@@ -28,9 +28,9 @@ class TweetsController < ApplicationController
   def create
     @tweet = current_user.tweets.build(tweet_params)
     if @tweet.save
-      redirect_to request.referer, notice: 'ポストしました。'
+      redirect_to request.referer, notice: 'ポストしました'
     else
-      redirect_to request.referer, alert: '140文字以内でポストしてください。'
+      redirect_to request.referer, alert: '140文字以内でポストしてください'
     end
   end
 
