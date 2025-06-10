@@ -23,9 +23,11 @@ Rails.application.routes.draw do
     resources :comments, only: [:create]
     resource :likes, only: %i[create destroy]
     resource :retweets, only: %i[create destroy]
+    resource :bookmarks, only: %i[create destroy]
   end
   resources :profiles
   resources :users do
     resource :relationships, only: %i[create destroy]
   end
+  resources :bookmarks, only: [:index]
 end

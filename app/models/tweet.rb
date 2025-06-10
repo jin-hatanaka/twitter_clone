@@ -5,6 +5,7 @@ class Tweet < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :retweets, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
   has_many_attached :images
 
   validates :content, length: { maximum: 140 }
@@ -17,5 +18,9 @@ class Tweet < ApplicationRecord
 
   def retweeted_by?(user)
     retweets.exists?(user_id: user.id)
+  end
+
+  def bookmarked_by?(user)
+    bookmarks.exists?(user_id: user.id)
   end
 end

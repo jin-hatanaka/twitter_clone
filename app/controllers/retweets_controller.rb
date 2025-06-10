@@ -8,8 +8,7 @@ class RetweetsController < ApplicationController
   end
 
   def destroy
-    @tweet = Tweet.find(params[:tweet_id])
-    @retweet = current_user.retweets.find_by(tweet_id: @tweet.id)
+    @retweet = current_user.retweets.find_by(tweet_id: params[:tweet_id])
     @retweet.destroy!
     redirect_back(fallback_location: root_path)
   end

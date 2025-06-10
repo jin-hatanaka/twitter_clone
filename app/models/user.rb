@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :retweets, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
   has_one_attached :icon_image
   has_one_attached :header_image
 
@@ -33,6 +34,9 @@ class User < ApplicationRecord
 
   # ユーザーがコメントしたツイートをとってくる
   has_many :comment_tweets, through: :comments, source: :tweet
+
+  # ユーザーがブックマークしたツイートをとってくる
+  has_many :bookmark_tweets, through: :bookmarks, source: :tweet
 
   with_options presence: true do
     validates :email

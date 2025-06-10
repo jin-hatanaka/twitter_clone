@@ -17,7 +17,7 @@ nav.nav
         i.bi.bi-envelope
         span.icon-name メッセージ
     li
-      = button_to "/", class: "nav-btn" do
+      = button_to bookmarks_path, method: :get, class: "nav-btn" do
         i.bi.bi-bookmark
         span.icon-name ブックマーク
     li

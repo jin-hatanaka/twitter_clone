@@ -8,12 +8,12 @@ class RelationshipsController < ApplicationController
     follow = current_user.relationships.build(follower_id: params[:user_id])
     follow.save!
     # 直前のページにリダイレクトする。
-    redirect_to request.referer, notice: "#{follow.follower.name}さんをフォローしました。"
+    redirect_to request.referer, notice: "#{follow.follower.name}さんをフォローしました"
   end
 
   def destroy
     follow = current_user.relationships.find_by(follower_id: params[:user_id])
     follow.destroy!
-    redirect_to request.referer, notice: "#{follow.follower.name}さんのフォローを解除しました。"
+    redirect_to request.referer, notice: "#{follow.follower.name}さんのフォローを解除しました"
   end
 end
