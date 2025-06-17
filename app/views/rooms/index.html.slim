@@ -1,0 +1,51 @@
+div.message-contents
+  = render 'layouts/sidebar'
+  main.main.border-start.border-end
+    div.bar.d-flex.align-items-center
+      div.bar-name
+        | メッセージ
+    div
+      - @another_entries.each do |entry|
+        = link_to rooms_path(tab: 'room', room_id: "#{entry.room.id}"), class: "room-link" do
+          div.d-flex class="#{'active-room' if params[:room_id] == "#{entry.room.id}"} one-room"
+            div
+              = image_tag entry.user.icon_image.variant(resize_to_fill: [40, 40]).processed, class: "post-user-img rounded-circle"
+            div
+              div
+                span.room-name
+                  = entry.user.name
+                span.room-date
+                  = entry.room.messages.last&.created_at&.to_fs(:room_datetime_jp)
+              div.room-content
+                span
+                  = entry.room.messages.last&.content  
+ 
+  div.message-container.border-end
+    -if params[:tab] == 'room'
+      div.bar.d-flex.align-items-center.border-bottom
+        div
+          = image_tag @another_entry.user.icon_image.variant(resize_to_fill: [35, 35]).processed, class: "post-user-img rounded-circle"
+        div.bar-room-name
+          = @another_entry.user.name
+      div.exchanging-messages-container.pt-4
+        div.exchanging-messages
+          - @messages.each do |message|
+            - if message.user == current_user
+              div.d-flex.flex-column.align-items-end.mb-3
+                div.my-message
+                  = simple_format(message.content, class: "simple_format")
+                div.message-date
+                  = message.created_at.to_fs(:room_datetime_jp)
+            - else
+              div.d-flex.flex-column.align-items-start.mb-3
+                div.another-message
+                  = message.content
+                div.message-date
+                  = message.created_at.to_fs(:room_datetime_jp)
+
+        div.message-form-container
+          = form_with model: [@room, @message], url: room_messages_path(@room) do |f|
+            div.d-flex.align-items-center.justify-content-center
+              = f.text_area :content, class: "message-form", placeholder: "新しいメッセージを作成"
+              = button_tag type: "submit", class: "form-btn" do
+                i.bi.bi-send
