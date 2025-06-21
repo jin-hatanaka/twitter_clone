@@ -26,6 +26,10 @@ div.post-display-section
                       = link_to user_relationships_path(tweet.user.id), data: { turbo_method: :post }, class: "dropdown-item" do
                         = tweet.user.name
                         | さんをフォロー
+                  li
+                    = link_to user_rooms_path(tweet.user.id), data: { turbo_method: :post }, class: "dropdown-item" do
+                      = tweet.user.name
+                      | さんにメッセージ
           div.post-content
             span
               = simple_format(tweet.content, class: "simple_format")

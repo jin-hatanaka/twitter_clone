@@ -28,6 +28,10 @@ Rails.application.routes.draw do
   resources :profiles
   resources :users do
     resource :relationships, only: %i[create destroy]
+    resources :rooms, only: [:create]
   end
   resources :bookmarks, only: [:index]
+  resources :rooms, only: [:index] do
+    resources :messages, only: [:create]
+  end
 end
