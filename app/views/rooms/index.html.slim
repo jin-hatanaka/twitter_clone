@@ -1,5 +1,6 @@
 div.message-contents
   = render 'layouts/sidebar'
+
   main.main.border-start.border-end
     div.bar.d-flex.align-items-center
       div.bar-name
@@ -39,7 +40,7 @@ div.message-contents
             - else
               div.d-flex.flex-column.align-items-start.mb-3
                 div.another-message
-                  = message.content
+                  = simple_format(message.content, class: "simple_format")
                 div.message-date
                   = message.created_at.to_fs(:room_datetime_jp)
 

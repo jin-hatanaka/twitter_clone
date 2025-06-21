@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_11_063727) do
     t.integer "room_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "room_id"], name: "index_entries_on_user_id_and_room_id", unique: true
   end
 
   create_table "likes", force: :cascade do |t|

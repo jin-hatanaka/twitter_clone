@@ -5,12 +5,14 @@ class RoomsController < ApplicationController
   def create
     @user = User.find_by(id: params[:user_id])
     my_room_ids = current_user.entries.pluck(:room_id)
-    existing_room = Entry.find_by(user_id: @user.id, room_id: my_room_ids)
+    existing_room = @user.entries.find_by(room_id: my_room_ids)
 
     if existing_room.nil?
-      @room = Room.create
-      @room.entries.create(user_id: current_user.id)
-      @room.entries.create(user_id: @user.id)
+      ApplicationRecord.transaction do
+        @room = Room.create!
+        @room.entries.create!(user_id: current_user.id)
+        @room.entries.create!(user_id: @user.id)
+      end
     end
     redirect_to rooms_path
   end
@@ -24,9 +26,8 @@ class RoomsController < ApplicationController
     return unless params[:tab] == 'room'
 
     @room = Room.find(params[:room_id])
-    @messages = @room.messages.includes(:user)
+    @messages = @room.messages
     @message = Message.new
-    @another_entry = Entry.where(room_id: @room.id)
-                          .where.not(user_id: current_user.id).first
+    @another_entry = @room.entries.where.not(user_id: current_user.id).first
   end
 end
