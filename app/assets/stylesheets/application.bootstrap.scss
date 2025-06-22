@@ -541,3 +541,120 @@ ul {
 .bookmark-contents {
   padding: 0 0 200px;
 }
+
+/* メッセージページの設定 */
+.message-contents {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 19% 29% 38%;
+}
+
+.room-link {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    color: inherit;
+  }
+}
+
+.one-room {
+  padding: 12px;
+
+  span {
+    font-size: 15px;
+  }
+
+  .room-date {
+    color: rgb(83, 100, 113);
+    margin-left: 8px;
+  }
+
+  .room-content {
+    width: 270px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    background-color: #eff3f4;
+  }
+}
+
+.active-room {
+  border-right: solid 2px rgb(29, 155, 240);
+  background-color: #eff3f4;
+}
+
+.message-container {
+  padding: 0 12px;
+
+  .bar-room-name {
+    font-weight: bold;
+    font-size: 17px;
+  }
+
+  .my-message,
+  .another-message {
+    padding: 8px;
+    font-size: 15px;
+    border-radius: 10px;
+    max-width: 380px;
+    overflow-wrap: break-word;
+  }
+
+  .my-message {
+    background-color: rgb(29, 155, 240);
+    color: #fff;
+  }
+
+  .another-message {
+    background-color: #eff3f4;
+  }
+
+  .message-date {
+    font-size: 13px;
+    color: #536471;
+  }
+
+  position: relative;
+}
+
+.exchanging-messages-container {
+  height: 674px;
+  display: flex;
+  flex-direction: column;
+
+  .exchanging-messages {
+    height: 595px;
+    overflow-y: scroll;
+    flex-shrink: 1;
+  }
+
+  .message-form-container {
+    flex-shrink: 0;
+  }
+}
+
+.message-form {
+  border: none;
+  outline: none;
+  resize: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 15px;
+  background-color: #eff3f4;
+  margin: 7px 0 4px;
+  field-sizing: content;
+  width: 100%;
+  min-height: 1lh;
+  max-height: 7lh;
+}
+
+.form-btn {
+  border: none;
+  font-size: 20px;
+  color: rgb(29, 155, 240);
+  background-color: inherit;
+}
