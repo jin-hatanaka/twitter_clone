@@ -7,6 +7,7 @@ class CommentsController < ApplicationController
     @comment = @tweet.comments.build(comment_params)
     @comment.user_id = current_user.id
     @comment.save
+    @tweet.create_notification!(current_user, 'comment', comment_id: @comment.id)
     redirect_to request.referer, notice: 'コメントをしました'
   end
 

@@ -1,0 +1,18 @@
+div
+  - case @notification.action
+  - when 'follow'
+    p
+      | #{@notification.visitor.name}さんにフォローされました。
+  - when 'like'
+    p
+      | #{@notification.visitor.name}さんがあなたのポストをいいねしました。
+  - when 'retweet'
+    p
+      | #{@notification.visitor.name}さんがあなたのポストをリポストしました。
+  - when 'comment'
+    p
+      | #{@notification.visitor.name}さんがあなたのポストにコメントしました。
+    p
+      | コメント内容：
+      br
+      | #{@notification.comment.content}

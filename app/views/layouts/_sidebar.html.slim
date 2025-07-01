@@ -9,7 +9,7 @@ nav.nav
         i.bi.bi-search
         span.icon-name 話題を検索
     li
-      = button_to "/", class: "nav-btn" do
+      = button_to notifications_path, method: :get, class: "nav-btn" do
         i.bi.bi-bell
         span.icon-name 通知
     li

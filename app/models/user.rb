@@ -40,6 +40,14 @@ class User < ApplicationRecord
   # ユーザーがブックマークしたツイートをとってくる
   has_many :bookmark_tweets, through: :bookmarks, source: :tweet
 
+  # 通知を送る側からのhas_many
+  has_many :active_notifications, class_name: 'Notification', foreign_key: 'visitor_id', dependent: :destroy,
+                                  inverse_of: :visitor
+
+  # 通知を受け取る側からのhas_mamy
+  has_many :passive_notifications, class_name: 'Notification', foreign_key: 'visited_id', dependent: :destroy,
+                                   inverse_of: :visited
+
   with_options presence: true do
     validates :email
     validates :phone_number
@@ -78,5 +86,19 @@ class User < ApplicationRecord
   # あるユーザが引数で渡されたuserにフォローされているか調べるメソッド
   def followed_by?(user)
     reverse_of_relationships.find_by(following_id: user.id).present?
+  end
+
+  def create_notification_follow!(current_user)
+    # フォローされているか検索
+    temp = current_user.active_notifications.where(visited_id: id, action: 'follow')
+    # フォローされている場合は処理を終了
+    return if temp.present?
+
+    notification = current_user.active_notifications.new(
+      visited_id: id,
+      action: 'follow'
+    )
+    notification.save if notification.valid?
+    NotificationMailer.send_notification(notification).deliver_now
   end
 end

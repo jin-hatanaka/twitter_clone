@@ -149,3 +149,28 @@ comment3 = tweet9.comments.build(
 )
 comment3.user = user3
 comment3.save!
+
+Rails.logger.debug '====================  notification create ===================='
+notification1 = user1.active_notifications.new(
+  visited_id: user2.id,
+  tweet_id: tweet8.id,
+  comment_id: nil,
+  action: 'like'
+)
+notification1.save!
+
+notification2 = user1.active_notifications.new(
+  visited_id: user3.id,
+  tweet_id: tweet1.id,
+  comment_id: nil,
+  action: 'like'
+)
+notification2.save!
+
+notification3 = user3.active_notifications.new(
+  visited_id: user1.id,
+  tweet_id: nil,
+  comment_id: nil,
+  action: 'follow'
+)
+notification3.save!

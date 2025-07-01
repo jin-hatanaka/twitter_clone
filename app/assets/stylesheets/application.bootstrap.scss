@@ -394,7 +394,8 @@ ul {
 
 .profile-contents,
 .post-detail-contents,
-.bookmark-contents {
+.bookmark-contents,
+.notification-contents {
   overflow-y: scroll;
   height: 674px;
 }
@@ -657,4 +658,46 @@ ul {
   font-size: 20px;
   color: rgb(29, 155, 240);
   background-color: inherit;
+}
+
+/* 通知ページの設定 */
+.notification-contents {
+  padding: 0 0 200px;
+}
+
+.one-notification {
+  padding: 10px 25px;
+
+  .notification-icon {
+    font-size: 24px;
+    margin: 0 8px 0 0;
+
+    .bi-person-fill,
+    .bi-chat-fill {
+      color: rgb(29, 155, 240);
+    }
+
+    .bi-heart-fill {
+      color: red;
+    }
+
+    .bi-arrow-repeat {
+      color: rgb(0, 170, 0);
+    }
+  }
+
+  .notification-user-icon {
+    margin: 0 0 7px;
+    padding: 2px 0 0 0;
+  }
+
+  .notification-content {
+    margin: 0 0 6px;
+    font-size: 15px;
+  }
+
+  .notification-tweet-content {
+    font-size: 15px;
+    color: #536471;
+  }
 }
