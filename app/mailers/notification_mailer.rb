@@ -5,10 +5,10 @@ class NotificationMailer < ApplicationMailer
     @notification = notification
     email = @notification.visited.email
     subjects = {
-      'follow' => 'フォローされました',
-      'like' => 'いいねがありました',
-      'retweet' => 'リポストされました',
-      'comment' => 'コメントがありました'
+      follow: 'フォローされました',
+      like: 'いいねがありました',
+      retweet: 'リポストされました',
+      comment: 'コメントがありました'
     }
     mail(to: email, subject: subjects[@notification.action])
   end

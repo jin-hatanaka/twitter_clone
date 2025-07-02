@@ -3,30 +3,14 @@
 
 div.one-notification.d-flex.border-bottom
   div.notification-icon
-    - case notification.action
-    - when 'follow'
-      i.bi.bi-person-fill
-    - when 'like'
-      i.bi.bi-heart-fill
-    - when 'retweet'
-      i.bi.bi-arrow-repeat
-    - when 'comment'
-      i.bi.bi-chat-fill
+    = notification_icon(notification.action)
   div
     div.notification-user-icon
       = image_tag visitor.icon_image.variant(resize_to_fill: [32, 32]).processed, class: "post-user-img rounded-circle"
     div.notification-content
       strong
         = visitor.name
-      - case notification.action
-      - when 'follow'
-        | さんにフォローされました
-      - when 'like'
-        | さんがあなたのポストをいいねしました
-      - when 'retweet'
-        | さんがあなたのポストをリポストしました
-      - when 'comment'
-        | さんがあなたのポストにコメントしました
+      = notification_content(notification.action)
     div.notification-tweet-content
       - if notification.action != 'follow'
         = notification.tweet.content
