@@ -1,0 +1,13 @@
+div.top-container
+  = render 'layouts/sidebar'
+  main.main.border-start.border-end
+    div.bar.d-flex.align-items-center.border-bottom
+      div.bar-name.ms-1
+        | 通知
+    div.notification-contents
+      - if @notifications.exists?
+        = render @notifications
+      - else
+        p.p-2
+          | 通知はありません
+  = render 'layouts/aside'

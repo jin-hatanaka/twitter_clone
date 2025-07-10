@@ -7,6 +7,8 @@ class RelationshipsController < ApplicationController
     # buildはnewと同じ意味で、アソシエーションしながらインスタンスをnewする時に形式的に使われる。
     follow = current_user.relationships.build(follower_id: params[:user_id])
     follow.save!
+    user = User.find(params[:user_id])
+    user.create_notification_follow!(current_user)
     # 直前のページにリダイレクトする。
     redirect_to request.referer, notice: "#{follow.follower.name}さんをフォローしました"
   end

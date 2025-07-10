@@ -4,6 +4,8 @@ class RetweetsController < ApplicationController
   def create
     @retweet = current_user.retweets.build(tweet_id: params[:tweet_id])
     @retweet.save!
+    tweet = Tweet.find(params[:tweet_id])
+    tweet.create_notification!(current_user, 'retweet')
     redirect_back(fallback_location: root_path)
   end
 
