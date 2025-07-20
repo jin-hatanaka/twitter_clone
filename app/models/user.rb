@@ -49,6 +49,7 @@ class User < ApplicationRecord
                                    inverse_of: :visited
 
   with_options presence: true do
+    validates :name
     validates :email
     validates :phone_number
     validates :birth_date
