@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Users', type: :request do
   describe 'サインアップ' do
     let(:user) { create(:user) }
     let(:user_params) { attributes_for(:user) } # ハッシュとして使えるパラメータuser_paramsを生成しておく
-    let(:invalid_user_params) { attributes_for(:user, name: "") }
-    
+    let(:invalid_user_params) { attributes_for(:user, name: '') }
+
     context '正常系' do
       it 'リクエストが成功すること' do
         post user_registration_path, params: { user: user_params }
@@ -27,7 +29,7 @@ RSpec.describe 'Users', type: :request do
     context '異常系' do
       it 'リクエストが失敗すること' do
         post user_registration_path, params: { user: invalid_user_params }
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'createが失敗すること' do
@@ -40,8 +42,8 @@ RSpec.describe 'Users', type: :request do
 
   describe 'ログイン' do
     let(:user) { create(:user) }
-    let(:user_params) { {email: user.email, password: user.password} }
-    let(:invalid_user_params) { {email: user.email, password: ""} }
+    let(:user_params) { { email: user.email, password: user.password } }
+    let(:invalid_user_params) { { email: user.email, password: '' } }
 
     context '正常系' do
       it 'リクエストが成功すること' do
@@ -63,7 +65,7 @@ RSpec.describe 'Users', type: :request do
     context '異常系' do
       it 'リクエストが失敗すること' do
         post user_registration_path, params: { user: invalid_user_params }
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'ログイン状態にならないこと' do
@@ -72,5 +74,4 @@ RSpec.describe 'Users', type: :request do
       end
     end
   end
-
 end

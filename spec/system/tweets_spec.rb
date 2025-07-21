@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Tweets", type: :system do
+RSpec.describe 'Tweets', type: :system do
   let(:user) { create(:user) }
   let(:tweet) { build(:tweet) }
 
@@ -31,7 +33,7 @@ RSpec.describe "Tweets", type: :system do
     end
 
     it 'ツイートが一覧に表示されること' do
-      create(:tweet, content: '既存のツイート', user: user)
+      create(:tweet, content: '既存のツイート', user:)
 
       visit root_path
 
