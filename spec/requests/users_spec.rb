@@ -8,7 +8,7 @@ RSpec.describe 'Users', type: :request do
     let(:user_params) { attributes_for(:user) } # ハッシュとして使えるパラメータuser_paramsを生成しておく
     let(:invalid_user_params) { attributes_for(:user, name: '') }
 
-    context '正常系' do
+    context 'when input is valid' do
       it 'リクエストが成功すること' do
         post user_registration_path, params: { user: user_params }
         expect(response).to have_http_status(:see_other)
@@ -26,7 +26,7 @@ RSpec.describe 'Users', type: :request do
       end
     end
 
-    context '異常系' do
+    context 'when input is invalid' do
       it 'リクエストが失敗すること' do
         post user_registration_path, params: { user: invalid_user_params }
         expect(response).to have_http_status(:unprocessable_entity)
@@ -45,7 +45,7 @@ RSpec.describe 'Users', type: :request do
     let(:user_params) { { email: user.email, password: user.password } }
     let(:invalid_user_params) { { email: user.email, password: '' } }
 
-    context '正常系' do
+    context 'when input is valid' do
       it 'リクエストが成功すること' do
         post user_session_path, params: { user: user_params }
         expect(response).to have_http_status(:see_other)
@@ -58,11 +58,13 @@ RSpec.describe 'Users', type: :request do
 
       it 'ログイン状態になること' do
         post user_session_path, params: { user: user_params }
-        expect(controller.current_user).to eq(user) # controller は、現在テスト対象となっているコントローラーのインスタンスを指す(ここでの controller は Users::SessionsController のインスタンス)
+        # controller は、現在テスト対象となっているコントローラーのインスタンスを指す
+        # ここでの controller は Users::SessionsController のインスタンス
+        expect(controller.current_user).to eq(user)
       end
     end
 
-    context '異常系' do
+    context 'when input is invalid' do
       it 'リクエストが失敗すること' do
         post user_registration_path, params: { user: invalid_user_params }
         expect(response).to have_http_status(:unprocessable_entity)

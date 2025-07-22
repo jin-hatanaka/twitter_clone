@@ -12,7 +12,7 @@ RSpec.describe 'Tweets', type: :request do
     sign_in user
   end
 
-  context '正常系' do
+  context 'when input is valid' do
     it 'リクエストが成功すること' do
       post tweets_path, params: { tweet: tweet_params }, headers: { 'HTTP_REFERER' => root_path }
       expect(response).to have_http_status(:found)
@@ -30,7 +30,7 @@ RSpec.describe 'Tweets', type: :request do
     end
   end
 
-  context '異常系' do
+  context 'when input is invalid' do
     it 'リクエストが失敗すること' do
       post tweets_path, params: { tweet: invalid_tweet_params }, headers: { 'HTTP_REFERER' => root_path }
       expect(response).to have_http_status(:found)

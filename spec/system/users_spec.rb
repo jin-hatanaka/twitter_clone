@@ -6,8 +6,8 @@ RSpec.describe 'Users', type: :system do
   describe 'サインアップ' do
     let(:user) { build(:user) }
 
-    context '正常系' do
-      it 'サインアップできること' do
+    context 'when input is valid' do
+      before do
         visit new_user_registration_path
 
         fill_in '名前', with: user.name
@@ -17,20 +17,23 @@ RSpec.describe 'Users', type: :system do
         fill_in 'パスワード', with: user.password
         fill_in 'パスワード確認用', with: user.password_confirmation
         click_button '登録する'
+      end
 
-        # メール送信を確認
+      it '認証メールが送信されていること' do
         expect(ActionMailer::Base.deliveries.size).to eq(1)
+      end
 
-        # フラッシュメッセージを確認
+      it 'フラッシュメッセージが表示されていること' do
         expect(page).to have_content('本人確認用のメールを送信しました。メール内のリンクからアカウントを有効化させてください。')
+      end
 
-        # ログインボタンが表示されていることを確認
+      it 'ログインボタンが表示されていること' do
         expect(page).to have_button('ログイン')
       end
     end
 
-    context '異常系' do
-      it 'サインアップできないこと' do
+    context 'when input is invalid' do
+      before do
         visit new_user_registration_path
 
         fill_in '名前', with: ''
@@ -40,11 +43,13 @@ RSpec.describe 'Users', type: :system do
         fill_in 'パスワード', with: user.password
         fill_in 'パスワード確認用', with: user.password_confirmation
         click_button '登録する'
+      end
 
-        # フラッシュメッセージを確認
+      it 'フラッシュメッセージが表示されていること' do
         expect(page).to have_content('エラーが発生したため ユーザー は保存されませんでした。')
+      end
 
-        # 認証メールが送信されていないことを確認
+      it '認証メールが送信されていないこと' do
         expect(ActionMailer::Base.deliveries.size).to eq(0)
       end
     end
@@ -53,37 +58,42 @@ RSpec.describe 'Users', type: :system do
   describe 'ログイン' do
     let(:user) { create(:user) }
 
-    context '正常系' do
-      it 'ログインできること' do
+    context 'when input is valid' do
+      before do
         visit new_user_session_path
 
         fill_in 'メールアドレス', with: user.email
         fill_in 'パスワード', with: user.password
         click_button 'ログイン'
+      end
 
-        # フラッシュメッセージを確認
+      it 'フラッシュメッセージが表示されていること' do
         expect(page).to have_content('ログインしました。')
+      end
 
-        # ログインユーザー名が表示されていることを確認
+      it 'ログインユーザー名が表示されていること' do
         expect(page).to have_content user.name
+      end
 
-        # ログアウトボタンが表示されていることを確認
+      it 'ログアウトボタンが表示されていること' do
         expect(page).to have_link 'ログアウト'
       end
     end
 
-    context '異常系' do
-      it 'ログインできないこと' do
+    context 'when input is invalid' do
+      before do
         visit new_user_session_path
 
         fill_in 'メールアドレス', with: user.email
         fill_in 'パスワード', with: ''
         click_button 'ログイン'
+      end
 
-        # フラッシュメッセージを確認
+      it 'フラッシュメッセージが表示されていること' do
         expect(page).to have_content('Eメールまたはパスワードが違います。')
+      end
 
-        # ログインボタンが表示されていることを確認
+      it 'ログインボタンが表示されていること' do
         expect(page).to have_button('ログイン')
       end
     end
