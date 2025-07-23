@@ -9,7 +9,7 @@ class Tweet < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many_attached :images
 
-  validates :content, length: { maximum: 140 }
+  validates :content, length: { maximum: 140 }, presence: true
 
   # ユーザーがツイートをいいねしたかどうかを判定するメソッド。
   # tweetに結びついているいいね(like)の中で今いいねしようとしているuser_idが存在するか判定している。
