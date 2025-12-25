@@ -31,11 +31,13 @@ title: "TwitterクローンER図"
 ---
 erDiagram
     users ||--o{ tweets : ""
-    users ||--o{ relationships: "following"
-    users ||--o{ relationships: "follower"
+    users ||--o{ relationships : "following"
+    users ||--o{ relationships : "follower"
+    users ||--o{ comments : ""
+    tweets ||--o{ comments : ""
 
     users {
-        int id PK
+        bigint id PK
         string email
         string encrypted_password
         string name
@@ -49,16 +51,26 @@ erDiagram
     }
 
     tweets {
-        int id PK
-        int user_id FK
+        bigint id PK
+        bigint user_id FK
         text content
         timestamp created_at
         timestamp updated_at
     }
 
     relationships {
-        int following_id FK
-        int follower_id FK
+        bigint id PK
+        bigint following_id FK
+        bigint follower_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    comments {
+        bigint id PK
+        bigint user_id FK
+        bigint tweet_id FK
+        text content
         timestamp created_at
         timestamp updated_at
     }
