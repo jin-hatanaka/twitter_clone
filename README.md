@@ -35,6 +35,8 @@ erDiagram
     users ||--o{ relationships : "follower"
     users ||--o{ comments : ""
     tweets ||--o{ comments : ""
+    users ||--o{ retweets : ""
+    tweets ||--o{ retweets : ""
 
     users {
         bigint id PK
@@ -74,6 +76,14 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
+
+    retweets {
+        bigint id PK
+        bigint user_id FK
+        bigint tweet_id FK
+        timestamp created_at
+        timestamp updated_at
+}
 ```
 
 ## 画面イメージ
