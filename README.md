@@ -37,6 +37,8 @@ erDiagram
     tweets ||--o{ comments : ""
     users ||--o{ retweets : ""
     tweets ||--o{ retweets : ""
+    users ||--o{ likes : ""
+    tweets ||--o{ likes : ""
 
     users {
         bigint id PK
@@ -83,7 +85,16 @@ erDiagram
         bigint tweet_id FK
         timestamp created_at
         timestamp updated_at
-}
+    }
+
+    likes {
+        bigint id PK
+        bigint user_id FK
+        bigint tweet_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
 ```
 
 ## 画面イメージ
