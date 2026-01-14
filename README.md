@@ -39,6 +39,8 @@ erDiagram
     tweets ||--o{ retweets : ""
     users ||--o{ likes : ""
     tweets ||--o{ likes : ""
+    users ||--o{ notifications : "visitor"
+    users ||--o{ notifications : "visited"
 
     users {
         bigint id PK
@@ -93,6 +95,16 @@ erDiagram
         bigint tweet_id FK
         timestamp created_at
         timestamp updated_at
+    }
+
+    notifications {
+        bigint id PK
+        bigint visitor_id FK
+        bigint visited_id FK
+        bigint tweet_id FK
+        bigint comment_id FK
+        string action
+        boolean checked
     }
 
 ```
