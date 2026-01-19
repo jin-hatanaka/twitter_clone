@@ -41,6 +41,10 @@ erDiagram
     tweets ||--o{ likes : ""
     users ||--o{ notifications : "visitor"
     users ||--o{ notifications : "visited"
+    users ||--o{ entries : ""
+    rooms ||--o{ entries : ""
+    users ||--o{ messages : ""
+    rooms ||--o{ messages : ""
 
     users {
         bigint id PK
@@ -105,6 +109,31 @@ erDiagram
         bigint comment_id FK
         string action
         boolean checked
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    rooms {
+        bigint id PK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    entries {
+        bigint id PK
+        bigint user_id FK
+        bigint room_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    messages {
+        bigint id PK
+        bigint user_id FK
+        bigint room_id FK
+        text content
+        timestamp created_at
+        timestamp updated_at
     }
 
 ```
