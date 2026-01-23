@@ -45,6 +45,8 @@ erDiagram
     rooms ||--o{ entries : ""
     users ||--o{ messages : ""
     rooms ||--o{ messages : ""
+    users ||--o{ bookmarks : ""
+    tweets ||--o{ bookmarks : ""
 
     users {
         bigint id PK
@@ -132,6 +134,14 @@ erDiagram
         bigint user_id FK
         bigint room_id FK
         text content
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    bookmarks {
+        bigint id PK
+        bigint user_id FK
+        bigint tweet_id FK
         timestamp created_at
         timestamp updated_at
     }
