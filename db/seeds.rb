@@ -25,6 +25,7 @@ user1.icon_image.attach(io: File.open(Rails.root.join('app/assets/images/icon1.p
 user1.header_image.attach(io: File.open(Rails.root.join('app/assets/images/header1.png')),
                           filename: 'header1.png')
 user1.skip_confirmation! # create,save,updateの前に呼び出す必要がある
+puts user1.errors.full_messages unless user1.valid?
 user1.save!
 
 user2 = User.new(

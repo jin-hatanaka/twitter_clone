@@ -10,13 +10,13 @@ development:
   <<: *default
   database: myapp_development
 
-
 test:
   <<: *default
   database: myapp_test
 #
 production:
   <<: *default
+  host: <%= ENV["DATABASE_HOST"] %>
   database: myapp_production
-  username: myapp
+  username: postgres
   password: <%= ENV["MYAPP_DATABASE_PASSWORD"] %>

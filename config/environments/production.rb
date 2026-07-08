@@ -43,6 +43,8 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :amazon
 
+  config.active_storage.variant_processor = :mini_magick
+
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = "wss://example.com/cable"
@@ -68,16 +70,19 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # メールサーバの設定
-  config.action_mailer.default_url_options = { host: 'https://protected-peak-36056-bd27eb82b192.herokuapp.com/' }
+  config.action_mailer.default_url_options = { 
+    host: 'twitterclone.link',
+    protocol: 'https'
+  }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    enable_starttls_auto: true,
-    address: 'smtp.gmail.com',
+    address: 'email-smtp.ap-northeast-1.amazonaws.com',
     port: 587,
-    domain: 'gmail.com',
-    user_name: Rails.application.credentials.dig(:gmail, :email),
-    password: Rails.application.credentials.dig(:gmail, :app_password),
-    authentication: 'login'
+    domain: 'twitterclone.link',
+    user_name: Rails.application.credentials.dig(:ses, :user_name),
+    password: Rails.application.credentials.dig(:ses, :password),
+    authentication: 'login',
+    enable_starttls_auto: true
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.

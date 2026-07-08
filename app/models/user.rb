@@ -17,6 +17,9 @@ class User < ApplicationRecord
   has_one_attached :icon_image
   has_one_attached :header_image
 
+  # ユーザー作成後にデフォルトのアイコン画像を添付する
+  after_commit :attach_default_icon, on: :create
+
   # フォローする側からのhas_many
   has_many :relationships, foreign_key: :following_id, dependent: :destroy, inverse_of: :following
   # 一覧画面で使用する（あるユーザーがフォローしている人全員をとってる->つまり、あるユーザーがフォローされている人をとってくる）
@@ -101,5 +104,17 @@ class User < ApplicationRecord
     )
     notification.save if notification.valid?
     NotificationMailer.send_notification(notification).deliver_now
+  end
+
+  private
+
+  # アイコン未設定のユーザーに、assets 内のデフォルト画像を Active Storage で添付する
+  def attach_default_icon
+    return if icon_image.attached?
+
+    icon_image.attach(
+      io: File.open(Rails.root.join('app/assets/images/icon2.png')),
+      filename: 'icon2.png',
+    )
   end
 end

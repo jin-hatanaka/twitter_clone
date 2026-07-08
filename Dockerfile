@@ -12,6 +12,8 @@ RUN apt-get update -qq && \
   apt-get install -y build-essential \
   libpq-dev \
   postgresql-client \
+  imagemagick \
+  curl \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -27,6 +29,8 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . /myapp
+
+RUN RAILS_ENV=production bundle exec rails assets:precompile
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
