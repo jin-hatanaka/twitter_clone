@@ -1,0 +1,185 @@
+name: Deploy Rails to Amazon ECS Fargate
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# GitHub Actions に与える権限を設定
+permissions:
+  # GitHub Actions から AWS に OIDC 認証するために必要
+  # AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY を使わずに AWS Role を引き受ける
+  id-token: write
+
+  # リポジトリのコードを読み取るために必要
+  # actions/checkout でソースコードを取得するために使う
+  contents: read
+
+# 同じ本番デプロイが同時に複数走らないようにする
+concurrency:
+  # 同じ group 名の workflow は同時実行されない
+  group: production-deploy
+
+  # すでに実行中のデプロイをキャンセルしない
+  # 本番デプロイ中に止めると中途半端になる可能性があるため false にする
+  cancel-in-progress: false
+
+# ワークフロー全体で使う共通の環境変数
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: twitterclone
+  ECS_CLUSTER: twitterclone-ecs-cluster
+  ECS_SERVICE: twitterclone-service
+  ECS_TASK_DEFINITION_FAMILY: twitterclone
+  ECS_CONTAINER_NAME: twitterclone
+  ECS_ASSIGN_PUBLIC_IP: ENABLED
+
+# 実際に実行する処理のまとまりを定義
+jobs:
+  deploy:
+    # GitHub Actions 画面に表示される job 名
+    name: Build, migrate, and deploy
+
+    # GitHub が用意する Ubuntu 環境で実行
+    runs-on: ubuntu-latest
+
+    # job 内で実行する処理を定義
+    steps:
+      # 1. GitHub リポジトリのソースコードを取得
+      # これをしないと Dockerfile や Rails アプリのコードが runner 上に存在しない
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # 2. GitHub Actions から AWS にログイン
+      # OIDC を使って、AWS の IAM Role を引き受ける
+      # AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY は使わない
+      - name: Configure AWS credentials by OIDC
+        uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          # GitHub Secrets に登録した IAM Role ARN を使う
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 3. Amazon ECR に Docker login
+      # この後の docker push を成功させるために必要
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 4. Docker image を build して、Amazon ECR に push
+      - name: Build, tag, and push Docker image to Amazon ECR
+        id: build-image
+        env:
+          # ECR の registry URL
+          # 例: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+
+          # Docker image の tag
+          # Git の commit SHA を使うことで、どの commit の image か分かりやすくなる
+          IMAGE_TAG: ${{ github.sha }}
+
+        run: |
+          # Docker image を作成
+          # --platform linux/amd64 は、ECS Fargate の実行環境に合わせるための指定
+          # -t で ECR に push するための image 名を付けている
+          docker build --platform linux/amd64 \
+            -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
+
+          # 作成した Docker image を Amazon ECR に push
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+          # 後続 step で使えるように、新しい image URI を出力
+          # 例:
+          # 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/twitterclone:commit-sha
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+      # 5. 現在 ECS に登録されている Task Definition を取得
+      - name: Download current ECS task definition
+        run: |
+          # ECS Task Definition の現在の内容を JSON として取得
+          aws ecs describe-task-definition \
+            --task-definition "$ECS_TASK_DEFINITION_FAMILY" \
+            --query taskDefinition > task-definition.json
+
+          # describe-task-definition で取得した JSON には、
+          # 新しい Task Definition 登録時には不要な読み取り専用項目が含まれる
+          # そのため jq で削除する
+          jq 'del(
+            .taskDefinitionArn,
+            .revision,
+            .status,
+            .requiresAttributes,
+            .compatibilities,
+            .registeredAt,
+            .registeredBy
+          )' task-definition.json > task-definition.cleaned.json
+
+          # 整形済みの JSON を、後続 step が使うファイル名に戻す
+          mv task-definition.cleaned.json task-definition.json
+
+      # 6. Task Definition 内の Docker image を新しい image に差し替える
+      - name: Render ECS task definition with new image
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          # 先ほど取得・整形した Task Definition JSON を使う
+          task-definition: task-definition.json
+
+          # どのコンテナの image を差し替えるか指定
+          # ECS Task Definition 内の container name と一致している必要がある
+          container-name: ${{ env.ECS_CONTAINER_NAME }}
+
+          # ECR に push した新しい Docker image URI を指定
+          image: ${{ steps.build-image.outputs.image }}
+
+      # 7. 新しい Task Definition で rails db:migrate を実行し、
+      #    migration 成功後に ECS Service を更新
+      - name: Run rails db:migrate, then deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          # 新しい image に差し替え済みの Task Definition を使う
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+
+          # デプロイ対象の ECS クラスター
+          cluster: ${{ env.ECS_CLUSTER }}
+
+          # デプロイ対象の ECS Service
+          service: ${{ env.ECS_SERVICE }}
+
+          # ECS Service が安定するまで待つ
+          # 新しい task が起動し、ALB health check に通るまで待つイメージ
+          wait-for-service-stability: true
+
+          # 最大 30 分待つ
+          # Rails 起動や ALB health check に時間がかかる場合を考慮している
+          wait-for-minutes: 30
+
+          # ECS Service を更新する前に、一時 task を実行
+          # 今回はこの一時 task で rails db:migrate を実行
+          run-task: true
+
+          # 一時 task が終了するまで待つ
+          # これにより、migration が終わる前に deploy されることを防ぐ
+          wait-for-task-stopped: true
+
+          # migration 用の一時 task も Fargate で実行
+          run-task-launch-type: FARGATE
+
+          # migration 用 task を起動する subnet
+          run-task-subnets: ${{ secrets.ECS_SUBNET_IDS }}
+
+          # migration 用 task に付ける security group
+          run-task-security-groups: ${{ secrets.ECS_SECURITY_GROUP_IDS }}
+
+          # migration 用 task に Public IP を付けるかどうか
+          run-task-assign-public-IP: ${{ env.ECS_ASSIGN_PUBLIC_IP }}
+
+          # 一時 task のコンテナ起動コマンドを上書き
+          run-task-container-overrides: |
+            [
+              {
+                "name": "${{ env.ECS_CONTAINER_NAME }}",
+                "command": ["bundle", "exec", "rails", "db:migrate"]
+              }
+            ]
