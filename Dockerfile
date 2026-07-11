@@ -31,7 +31,8 @@ RUN yarn install
 COPY . /myapp
 
 # Docker build時（GitHub Actions でのデプロイ時）のassets:precompile用にダミーのSECRET_KEY_BASEを設定
-RUN SECRET_KEY_BASE_DUMMY=1 RAILS_ENV=production bundle exec rails assets:precompile
+# GitHub Actions runner上では、まだ ECS Task Definition の環境変数が反映されていないため、ダミーのSECRET_KEY_BASEを設定
+RUN SECRET_KEY_BASE=dummy RAILS_ENV=production bundle exec rails assets:precompile
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
