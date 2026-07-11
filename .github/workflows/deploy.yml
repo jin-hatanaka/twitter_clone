@@ -32,7 +32,7 @@ env:
   ECS_CLUSTER: twitterclone-ecs-cluster
   ECS_SERVICE: twitterclone-service
   ECS_TASK_DEFINITION_FAMILY: twitterclone
-  ECS_CONTAINER_NAME: twitterclone
+  ECS_CONTAINER_NAME: twitterclone-web
   ECS_ASSIGN_PUBLIC_IP: ENABLED
 
 # 実際に実行する処理のまとまりを定義
